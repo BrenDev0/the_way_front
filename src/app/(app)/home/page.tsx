@@ -4,6 +4,7 @@ import { DocumentsStat, KnowledgeStatus } from "@/features/knowledge";
 import { SkillsStat } from "@/features/skills";
 import { ADMIN_ROLES, RequireRole } from "@/shared/session";
 import { Welcome } from "@/shell";
+import { ActionOverview } from "@/shell/ActionOverview";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
       <Welcome />
       <RequireRole roles={ADMIN_ROLES}>
         <LlmKeyNotice />
+        <ActionOverview />
       </RequireRole>
       <div className="stats">
         <RequireRole roles={ADMIN_ROLES}>

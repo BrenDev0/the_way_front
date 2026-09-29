@@ -51,6 +51,7 @@ export default function InviteWelcomePage() {
           <div className="invite-welcome__links">
             <Link href="/knowledge">Explorar conocimiento <span aria-hidden="true">↗</span></Link>
             <Link href="/members">Ver operadores <span aria-hidden="true">↗</span></Link>
+            <Link href="/skills">Crear skills <span aria-hidden="true">↗</span></Link>
           </div>
         </section>
       )}

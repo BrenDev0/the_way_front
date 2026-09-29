@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PROTECTED = ["/home", "/knowledge", "/members", "/welcome"];
+const PROTECTED = ["/home", "/knowledge", "/members", "/welcome", "/api-keys", "/skills"];
 const GUEST_ONLY = ["/", "/login", "/signup"];
 
 export function middleware(req: NextRequest) {
@@ -19,5 +19,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/signup", "/home/:path*", "/knowledge/:path*", "/members/:path*", "/welcome/:path*"],
+  matcher: ["/", "/login", "/signup", "/home/:path*", "/knowledge/:path*", "/members/:path*", "/welcome/:path*", "/api-keys/:path*", "/skills/:path*"],
 };

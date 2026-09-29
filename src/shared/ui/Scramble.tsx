@@ -16,8 +16,8 @@ export function Scramble({ text, lockEvery = 2, frameMs = 35 }: { text: string; 
   const done = locked >= text.length;
 
   useEffect(() => {
-    setFrame(0);
-  }, [text]);
+    setFrame(window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? text.length * lockEvery : 0);
+  }, [text, lockEvery]);
 
   useEffect(() => {
     if (done) return;

@@ -5,6 +5,7 @@ export interface User {
   organizationId: string;
   email: string;
   role: Role;
+  setupComplete: boolean;
   createdAt: string;
 }
 

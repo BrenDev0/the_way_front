@@ -10,15 +10,16 @@ import { Busy, Logo } from "@/shared/ui";
 interface NavItem {
   label: string;
   href?: string;
+  icon: string;
 }
 
 const NAV: NavItem[] = [
-  { label: "inicio", href: "/home" },
-  { label: "conocimiento", href: "/knowledge" },
-  { label: "operadores", href: "/members" },
-  { label: "skills" },
-  { label: "llaves api" },
-  { label: "organización" },
+  { label: "inicio", href: "/home", icon: "⌂" },
+  { label: "conocimiento", href: "/knowledge", icon: "▤" },
+  { label: "operadores", href: "/members", icon: "◎" },
+  { label: "skills", href: "/skills", icon: "◇" },
+  { label: "llaves api", href: "/api-keys", icon: "⚿" },
+  { label: "organización", icon: "▦" },
 ];
 
 export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
@@ -26,6 +27,7 @@ export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
   const user = useSession();
   const { data: organization } = useOrganization();
   const [leaving, setLeaving] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const isAdmin = ADMIN_ROLES.includes(user.role);
 
   async function handleSignOut() {
@@ -38,14 +40,16 @@ export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
       <Link href={isAdmin ? "/home" : "/welcome"} className="sidebar__brand" aria-label="Inicio">
         <Logo />
       </Link>
+      <span className="sidebar__caption">CONSOLA DE GESTIÓN / 01</span>
+      {isAdmin && <button className="btn btn--ghost sidebar__toggle" aria-expanded={expanded} aria-controls="main-navigation" onClick={() => setExpanded(!expanded)}>{expanded ? "Cerrar menú −" : "Navegación +"}</button>}
 
-      {isAdmin && <nav className="nav" aria-label="Principal">
+      {isAdmin && <nav id="main-navigation" className={`nav ${expanded ? "nav--expanded" : ""}`} aria-label="Principal">
         {NAV.map((item) => {
           if (!item.href) {
             return (
               <span key={item.label} className="nav__item nav__item--disabled" aria-disabled="true">
                 <span className="nav__prompt" aria-hidden="true">
-                  ❯
+                  {item.icon}
                 </span>
                 {item.label}
                 <span className="nav__tag">pronto</span>
@@ -57,11 +61,12 @@ export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
             <Link
               key={item.label}
               href={item.href}
+              onClick={() => setExpanded(false)}
               className={active ? "nav__item nav__item--active" : "nav__item"}
               aria-current={active ? "page" : undefined}
             >
               <span className="nav__prompt" aria-hidden="true">
-                ❯
+                {item.icon}
               </span>
               {item.label}
             </Link>

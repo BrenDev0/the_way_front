@@ -34,7 +34,7 @@ export function ConfirmButton({ children, question = "¿seguro?", onConfirm, dis
   return (
     <span className="confirm">
       <span className="confirm__question">{question}</span>
-      <button type="button" className="linkbtn linkbtn--danger" onClick={confirm} disabled={working}>
+      <button type="button" className="linkbtn linkbtn--danger" onClick={confirm} disabled={working || disabled}>
         {working ? "..." : "[sí]"}
       </button>
       <button type="button" className="linkbtn" onClick={() => setAsking(false)} disabled={working}>
