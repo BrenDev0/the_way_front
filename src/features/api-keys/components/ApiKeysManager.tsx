@@ -5,14 +5,20 @@ import { useMembers, refreshMembers } from "@/features/members/hooks";
 import { errorMessage, revalidate, useResource } from "@/shared/api";
 import { useSession } from "@/shared/session";
 import { Busy, ConfirmButton, Field, Spinner, TerminalBox } from "@/shared/ui";
-import { deleteApiKey, issueApiKey, listApiKeys, type Provider } from "../api";
+import { PROVIDER_NAMES, deleteApiKey, issueApiKey, listApiKeys, type Provider } from "../api";
 
 // Keep in sync with the backend's provider catalog. Empty selection uses its default.
 const MODELS: Record<Provider, string[]> = {
   anthropic: ["claude-opus-5", "claude-sonnet-5", "claude-fable-5-1", "claude-haiku-4-5-20251001"],
   openai: ["gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano", "gpt-5.2", "gpt-5.1", "gpt-5", "gpt-5-mini", "gpt-5-nano", "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano", "gpt-4o", "gpt-4o-mini", "o4-mini", "o3", "o3-mini"],
   gohighlevel: [],
+  tavily: [],
 };
+
+// Integrations: their key turns tools on; there is no model to choose.
+const NO_MODEL: Provider[] = ["gohighlevel", "tavily"];
+
+const DETAIL: Partial<Record<Provider, string>> = { gohighlevel: "Ubicación de CX", tavily: "Búsqueda web" };
 
 export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string }) {
   const currentUser = useSession();
@@ -31,7 +37,8 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
   const providers: { id: Provider; name: string; detail: string; glyph: string }[] = [
     { id: "anthropic", name: "Anthropic", detail: "Inteligencia artificial", glyph: "A" },
     { id: "openai", name: "OpenAI", detail: "Inteligencia artificial", glyph: "◉" },
-    { id: "gohighlevel", name: "GoHighLevel", detail: "Conexión con tu CRM", glyph: "↗" },
+    { id: "gohighlevel", name: "CX", detail: "Conexión con tu CRM", glyph: "↗" },
+    { id: "tavily", name: "Tavily", detail: "Búsqueda e investigación web", glyph: "⌕" },
   ];
 
   function configure(target: Provider) {
@@ -54,7 +61,7 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
     }
     setBusy(true);
     try {
-      await issueApiKey({ userId, provider, secret: secret.trim(), ...(provider === "gohighlevel" ? { accountId: accountId.trim() } : model ? { model } : {}) });
+      await issueApiKey({ userId, provider, secret: secret.trim(), ...(provider === "gohighlevel" ? { accountId: accountId.trim() } : model && !NO_MODEL.includes(provider) ? { model } : {}) });
       setSecret("");
       setAccountId("");
       setFeedback({ error: false, message: "Llave guardada. La configuración del equipo se ha actualizado." });
@@ -103,7 +110,7 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
         <div className="provider-card__top"><span className="provider-card__glyph" aria-hidden="true">{item.glyph}</span><span className={`console-badge ${key ? "console-badge--ready" : ""}`}>{!selected ? "Sin selección" : keys.loading ? "Cargando" : keys.error ? "No disponible" : key ? "Configurado" : "Sin configurar"}</span></div>
         <h3>{item.name}</h3><p>{item.detail}</p>
         <code>{key ? `••••${key.lastFour}` : "— — — —"}</code>
-        <span className="provider-card__model">{key?.model ?? (item.id === "gohighlevel" ? "Ubicación de GoHighLevel" : "Modelo del servidor")}</span>
+        <span className="provider-card__model">{key?.model ?? DETAIL[item.id] ?? "Modelo del servidor"}</span>
         <button className="btn btn--ghost btn--small" disabled={busy || !selected || keys.loading || Boolean(keys.error)} onClick={() => configure(item.id)}>{key ? "Reemplazar" : "Configurar"} <span aria-hidden="true">↗</span></button>
       </section>;
     })}</div>
@@ -112,10 +119,10 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
       <form className="stack" onSubmit={save}>
         <label className="field">Proveedor
           <select className="field__input" value={provider} disabled={busy} onChange={(event) => { setProvider(event.target.value as Provider); setModel(""); setSecret(""); setAccountId(""); }}>
-            <option value="anthropic">Anthropic</option><option value="openai">OpenAI</option><option value="gohighlevel">GoHighLevel</option>
+            {providers.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
           </select>
         </label>
-        {provider === "gohighlevel" ? <Field label="ID de ubicación" value={accountId} onChange={(event) => setAccountId(event.target.value)} required disabled={busy} autoComplete="off" /> :
+        {provider === "gohighlevel" ? <Field label="ID de ubicación" value={accountId} onChange={(event) => setAccountId(event.target.value)} required disabled={busy} autoComplete="off" /> : NO_MODEL.includes(provider) ? null :
           <label className="field">Modelo
             <select className="field__input" value={model} onChange={(event) => setModel(event.target.value)} disabled={busy}>
               <option value="">Predeterminado del servidor</option>
@@ -123,7 +130,7 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
             </select>
           </label>}
         <Field label="Llave secreta" type="password" autoComplete="new-password" value={secret} onChange={(event) => setSecret(event.target.value)} required disabled={busy} />
-        <p className="field__hint">Solo se muestran los últimos cuatro caracteres de las llaves guardadas. GoHighLevel no habilita IA; asigna Anthropic u OpenAI. Si hay ambos, el servidor prioriza Anthropic.</p>
+        <p className="field__hint">Solo se muestran los últimos cuatro caracteres de las llaves guardadas. CX y Tavily no habilitan IA por sí solos; asigna Anthropic u OpenAI. Tavily activa la búsqueda e investigación web del agente. Si hay ambos, el servidor prioriza Anthropic.</p>
         {replacing && <p className="alert alert--warn">Al guardar reemplazarás la llave actual de este proveedor para esta persona.</p>}
         <button className="btn" disabled={busy || !selected || keys.loading || Boolean(keys.error) || Boolean(members.error)}>{busy ? <Busy words={["GUARDANDO"]} /> : replacing ? "Reemplazar llave" : "Guardar llave"}</button>
       </form>
@@ -134,7 +141,7 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
       {keys.loading ? <Spinner /> : !keys.data?.length ? <p>No hay llaves asignadas.</p> : <ul className="rail">
         {keys.data.filter((key) => !userId || key.userId === userId).map((key) => <li key={key.id} className="stack">
           <strong>{key.userId === currentUser.id ? "Yo" : members.data?.find((member) => member.id === key.userId)?.email ?? key.userId}</strong>
-          <span>{key.provider} · ••••{key.lastFour}{key.model ? ` · ${key.model}` : ""}</span>
+          <span>{PROVIDER_NAMES[key.provider] ?? key.provider} · ••••{key.lastFour}{key.model ? ` · ${key.model}` : ""}</span>
           <ConfirmButton question="¿Revocar esta llave?" disabled={busy} onConfirm={() => remove(key.id, key.userId)}>Revocar</ConfirmButton>
         </li>)}
       </ul>}

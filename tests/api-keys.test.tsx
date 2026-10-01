@@ -39,7 +39,7 @@ describe("API key management", () => {
     const user = userEvent.setup();
     render(<ApiKeysManager initialUserId={member.id} />);
     await screen.findByText("Necesita una llave de IA");
-    await user.click(within(screen.getByRole("region", { name: "GoHighLevel" })).getByRole("button", { name: /Configurar/ }));
+    await user.click(within(screen.getByRole("region", { name: "CX" })).getByRole("button", { name: /Configurar/ }));
     expect(screen.getByLabelText("Proveedor")).toHaveValue("gohighlevel");
     expect(screen.getByLabelText("ID de ubicación")).toBeInTheDocument();
     expect(screen.getByLabelText("Llave secreta")).toHaveFocus();
@@ -94,7 +94,7 @@ describe("API key management", () => {
     expect(screen.getByRole("button", { name: "Reemplazar llave" })).toBeInTheDocument();
   });
 
-  it("requires a GoHighLevel location and never sends an AI model for it", async () => {
+  it("requires a CX location and never sends an AI model for it", async () => {
     const user = userEvent.setup();
     render(<ApiKeysManager initialUserId={member.id} />);
     await screen.findByText("Necesita una llave de IA");
@@ -108,6 +108,20 @@ describe("API key management", () => {
     const call = fetchMock.mock.calls.find(([, init]) => init?.method === "POST");
     expect(JSON.parse(call![1].body)).toEqual({ userId: member.id, provider: "gohighlevel", secret: "ghl-1234", accountId: "location-1" });
     expect(screen.queryByLabelText("Modelo")).not.toBeInTheDocument();
+  });
+
+  it("issues a Tavily key for web search, with no model to choose", async () => {
+    const user = userEvent.setup();
+    render(<ApiKeysManager initialUserId={member.id} />);
+    await screen.findByText("Necesita una llave de IA");
+    expect(screen.getByRole("region", { name: "Tavily" })).toBeInTheDocument();
+    await user.selectOptions(screen.getByLabelText("Proveedor"), "tavily");
+    expect(screen.queryByLabelText("Modelo")).not.toBeInTheDocument();
+    await user.type(screen.getByLabelText("Llave secreta"), "tvly-1234");
+    await user.click(screen.getByRole("button", { name: "Guardar llave" }));
+    await screen.findByText(/Llave guardada/);
+    const call = fetchMock.mock.calls.find(([, init]) => init?.method === "POST");
+    expect(JSON.parse(call![1].body)).toEqual({ userId: member.id, provider: "tavily", secret: "tvly-1234" });
   });
 
   it("shows failed saves and permits a retry", async () => {

@@ -1,6 +1,14 @@
 import { request } from "@/shared/api";
 
-export type Provider = "anthropic" | "openai" | "gohighlevel";
+export type Provider = "anthropic" | "openai" | "gohighlevel" | "tavily";
+
+/** How each provider is named to people. The stored values never appear on screen. */
+export const PROVIDER_NAMES: Record<Provider, string> = {
+  anthropic: "Anthropic",
+  openai: "OpenAI",
+  gohighlevel: "CX",
+  tavily: "Tavily",
+};
 
 export interface ApiKey {
   id: string;
@@ -24,7 +32,7 @@ export interface IssueApiKeyInput {
 }
 
 const errors = {
-  api_key_account_id_required: "GoHighLevel necesita un ID de ubicación.",
+  api_key_account_id_required: "CX necesita un ID de ubicación.",
   api_key_model_provider_mismatch: "El modelo no corresponde al proveedor.",
   api_key_model_not_supported: "Este proveedor no admite modelos.",
   user_not_found: "El operador ya no está disponible.",

@@ -15,7 +15,7 @@ If old generated route files cause TypeScript errors after moving pages, clear t
 
 ## Operator provisioning
 
-Invite the operator from **operadores**. Once the invitation is accepted, use **Gestionar llaves** in the directory or open **llaves api**. Assign Anthropic or OpenAI credentials to enable AI; GoHighLevel requires a location ID and does not by itself enable AI. Saving the same provider for the same person replaces their existing credential. Revocation requires confirmation.
+Invite the operator from **operadores**. Once the invitation is accepted, use **Gestionar llaves** in the directory or open **llaves api**. Assign Anthropic or OpenAI credentials to enable AI; CX requires a location ID and does not by itself enable AI. Saving the same provider for the same person replaces their existing credential. Revocation requires confirmation.
 
 The UI shows only the masked key returned by the backend and clears secret inputs after a successful save. Setup status reflects credential presence, not whether the provider has validated the credential. Model choices mirror the backend catalog in `src/core/llm/langchain/providers`; update both when changing supported models. Leaving the model blank uses the backend default.
 
