@@ -86,6 +86,32 @@ describe("skills workspace", () => {
     expect(await screen.findByRole("listitem")).toHaveTextContent("brand-voice");
   });
 
+  it("shows why a turn paused and resumes it on Reanudar", async () => {
+    let state = "paused";
+    const base = fetchMock.getMockImplementation() as (url: string, init?: RequestInit) => Promise<Response>;
+    fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
+      if (url === "/api/backend/conversations/c1") {
+        return Response.json({ id: "c1", status: state, pause: state === "paused" ? { reason: "rate_limit", detail: "", pausedAt: "x", retryAfter: null } : null });
+      }
+      if (url === "/api/backend/conversations/c1/resume" && init?.method === "POST") {
+        state = "idle";
+        return Response.json({ id: "c1", status: "running" }, { status: 202 });
+      }
+      return base(url, init);
+    });
+    const user = userEvent.setup();
+    render(<SkillsWorkspace />);
+    await user.type(screen.getByLabelText("Mensaje para el agente"), "Quiero una skill");
+    await user.click(screen.getByRole("button", { name: "Enviar" }));
+
+    await screen.findByText(/limitó las solicitudes/, undefined, { timeout: 4000 });
+    expect(screen.queryByText(/no pudo terminar/)).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Reanudar" }));
+
+    await waitFor(() => expect(screen.queryByText(/limitó las solicitudes/)).not.toBeInTheDocument(), { timeout: 4000 });
+    expect(posts("conversations/c1/resume")).toEqual([{}]);
+  });
+
   it("does not overwrite hand edits with a new agent draft and shares them with the agent", async () => {
     const user = userEvent.setup();
     render(<SkillsWorkspace />);

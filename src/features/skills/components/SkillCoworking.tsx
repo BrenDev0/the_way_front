@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 
 import {
   getConversation,
   listMessages,
+  pauseText,
+  resumeConversation,
   sendMessage,
   startConversation,
   textOf,
@@ -79,7 +81,10 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
         setLines(next);
         setPending(null);
         setWaiting(false);
-        if (latest.status !== "idle") setError("El agente no pudo terminar la respuesta. Inicia una nueva sesión para continuar.");
+        // paused: shown with its own notice and a way to carry on, below
+        if (latest.status !== "idle" && latest.status !== "paused") {
+          setError("El agente no pudo terminar la respuesta. Inicia una nueva sesión para continuar.");
+        }
         const written = latestDraft(next);
         if (written) {
           seenDraft.current = written;
@@ -122,6 +127,22 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
     } catch (err) {
       setPending(null);
       setInput(text);
+      setError(errorMessage(err));
+    } finally {
+      setSending(false);
+    }
+  }
+
+  /** A paused turn carries on from its last step on the server; this waits for it again. */
+  async function resume() {
+    if (!conversation || sending || waiting) return;
+    setSending(true);
+    setError(null);
+    try {
+      setConversation(await resumeConversation(conversation.id));
+      setPolls(0);
+      setWaiting(true);
+    } catch (err) {
       setError(errorMessage(err));
     } finally {
       setSending(false);
@@ -202,6 +223,16 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
             </div>
           )}
         </div>
+        {conversation?.status === "paused" && !busy && (
+          <div className="alert alert--warn skill-chat__pause" role="alert">
+            <p>
+              <strong>{pauseText(conversation.pause).title}.</strong> {pauseText(conversation.pause).body} Todo lo que hizo el agente hasta aquí está guardado.
+            </p>
+            <button type="button" className="btn btn--small" onClick={() => void resume()}>
+              Reanudar
+            </button>
+          </div>
+        )}
         {error && <p className="alert alert--error" role="alert">! {error}</p>}
         <form className="skill-chat__composer" onSubmit={send}>
           <label className="field">
