@@ -1,13 +1,14 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { isAvailable } from "../api";
 import { useDocuments } from "../hooks";
 
 export function KnowledgeOverview() {
   const { data, loading, error } = useDocuments();
   const total = data?.length ?? 0;
-  const ready = data?.filter((doc) => doc.status === "extracted").length ?? 0;
-  const trained = data?.filter((doc) => doc.status === "trained").length ?? 0;
+  const processing = data?.filter((doc) => doc.status === "pending" || doc.status === "extracting").length ?? 0;
+  const trained = data?.filter(isAvailable).length ?? 0;
   const progress = total > 0 ? Math.round((trained / total) * 100) : 0;
   const unavailable = !data && Boolean(error);
 
@@ -20,7 +21,7 @@ export function KnowledgeOverview() {
             IDENTIDAD / CONTEXTO COMPARTIDO
           </p>
           <h2 id="knowledge-overview-title">La memoria de tu organización.</h2>
-          <p>Reúne quiénes son, qué ofrecen y cómo trabajan. Una vez entrenadas, el agente puede consultar estas fuentes para ayudar a todo el equipo.</p>
+          <p>Reúne quiénes son, qué ofrecen y cómo trabajan. En cuanto se procesan, el agente puede consultar estas fuentes para ayudar a todo el equipo. Asigna cada manual a su marca.</p>
           <div className="knowledge-overview__tags" aria-label="Ejemplos de conocimiento compartido">
             <span>IDENTIDAD</span>
             <span>PROCESOS</span>
@@ -30,7 +31,7 @@ export function KnowledgeOverview() {
         <div
           className="knowledge-overview__dial"
           style={{ "--knowledge-progress": `${progress}%` } as CSSProperties}
-          aria-label={loading ? "Cargando progreso" : unavailable ? "Progreso no disponible" : `${trained} de ${total} documentos entrenados`}
+          aria-label={loading ? "Cargando progreso" : unavailable ? "Progreso no disponible" : `${trained} de ${total} documentos disponibles`}
         >
           <div className="knowledge-overview__dial-inner">
             <span className="knowledge-overview__dial-value">{loading || unavailable ? "--" : String(trained).padStart(2, "0")}</span>
@@ -45,9 +46,9 @@ export function KnowledgeOverview() {
           <span className="knowledge-overview__flow-note">de la organización</span>
         </div>
         <div>
-          <span className="knowledge-overview__flow-label">LISTAS PARA ENTRENAR</span>
-          <strong>{loading || unavailable ? "--" : String(ready).padStart(2, "0")}</strong>
-          <span className="knowledge-overview__flow-note">fuentes preparadas</span>
+          <span className="knowledge-overview__flow-label">PROCESANDO</span>
+          <strong>{loading || unavailable ? "--" : String(processing).padStart(2, "0")}</strong>
+          <span className="knowledge-overview__flow-note">extrayendo su texto</span>
         </div>
         <div>
           <span className="knowledge-overview__flow-label">DISPONIBLES PARA EL AGENTE</span>

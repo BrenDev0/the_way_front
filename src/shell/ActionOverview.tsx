@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMembers } from "@/features/members/hooks";
 import { useInvitations } from "@/features/invitations/hooks";
+import { isAvailable } from "@/features/knowledge/api";
 import { useDocuments } from "@/features/knowledge/hooks";
 
 export function ActionOverview() {
@@ -12,7 +13,7 @@ export function ActionOverview() {
   const actions = [
     { label: "Configurar equipo", detail: "personas necesitan una llave de IA", href: "/members", count: members.data?.filter((m) => !m.setupComplete).length, error: members.error },
     { label: "Revisar invitaciones", detail: "invitaciones pendientes", href: "/members", count: invitations.data?.length, error: invitations.error },
-    { label: "Entrenar conocimiento", detail: "documentos listos para entrenar", href: "/knowledge", count: documents.data?.filter((d) => d.status === "extracted").length, error: documents.error },
+    { label: "Describir conocimiento", detail: "documentos sin descripción", href: "/knowledge", count: documents.data?.filter((d) => isAvailable(d) && !d.description.trim()).length, error: documents.error },
   ];
   return <section className="action-overview" aria-label="Acciones pendientes">
     <div className="console-section-label">01 / SIGUIENTES ACCIONES <span>Tu centro de operaciones</span></div>

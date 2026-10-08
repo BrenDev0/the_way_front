@@ -15,11 +15,13 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { label: "inicio", href: "/home", icon: "⌂" },
+  { label: "mi cx", href: "/cx", icon: "◫" },
   { label: "conocimiento", href: "/knowledge", icon: "▤" },
+  { label: "biblioteca", href: "/library", icon: "▣" },
   { label: "operadores", href: "/members", icon: "◎" },
   { label: "skills", href: "/skills", icon: "◇" },
   { label: "llaves api", href: "/api-keys", icon: "⚿" },
-  { label: "organización", icon: "▦" },
+  { label: "organización", href: "/organization", icon: "▦" },
 ];
 
 export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {

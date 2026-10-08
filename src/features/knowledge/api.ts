@@ -14,6 +14,8 @@ export interface KnowledgeDocument {
   uploadedBy: string | null;
   createdAt: string;
   updatedAt: string;
+  /** The client brand it is about -- a brand in the library -- or null for the organization itself. */
+  brand: string | null;
 }
 
 export const DOCUMENT_LIMIT = 200;
@@ -24,8 +26,8 @@ export const STATUS_ORDER: DocumentStatus[] = ["trained", "extracted", "extracti
 export const STATUS_LABELS: Record<DocumentStatus, string> = {
   pending: "pendiente",
   extracting: "extrayendo",
-  extracted: "listo para entrenar",
-  trained: "entrenado",
+  extracted: "disponible",
+  trained: "disponible",
   unsupported: "no soportado",
   failed: "fallido",
 };
@@ -58,12 +60,18 @@ const MIME_BY_EXTENSION: Record<string, string> = {
 
 export const SUPPORTED_EXTENSIONS = Object.keys(MIME_BY_EXTENSION);
 
+/** What the agent can read: as soon as the text is out. Training only writes a description. */
+export function isAvailable(document: Pick<KnowledgeDocument, "status">) {
+  return document.status === "extracted" || document.status === "trained";
+}
+
 const KNOWLEDGE_ERRORS: ErrorMessages = {
   document_too_large: "El archivo supera el máximo de 64 MB.",
   document_limit_reached: "Alcanzaste el límite de 200 documentos.",
   document_not_found: "Ese documento ya no existe.",
   document_not_uploaded: "El archivo no terminó de subirse. Intenta de nuevo.",
-  document_nothing_to_train: "No hay documentos listos para entrenar.",
+  document_nothing_to_train: "No hay documentos sin descripción.",
+  document_no_changes: "No hay cambios que guardar.",
 };
 
 export function extensionOf(filename: string) {
@@ -101,39 +109,16 @@ export function deleteDocument(id: string) {
   });
 }
 
+export function updateDocument(id: string, changes: { title?: string; description?: string; brand?: string }) {
+  return request<KnowledgeDocument>(`documents/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: changes,
+    errors: KNOWLEDGE_ERRORS,
+  });
+}
+
 export function trainDocuments() {
   return request<{ detail: string; queued: number }>("documents/train", { method: "POST", errors: KNOWLEDGE_ERRORS });
 }
 
-function publicUploadUrl(url: string) {
-  const origin = process.env.NEXT_PUBLIC_UPLOAD_ORIGIN;
-  if (!origin) return url;
-  const target = new URL(url);
-  const replacement = new URL(origin);
-  target.protocol = replacement.protocol;
-  target.host = replacement.host;
-  return target.toString();
-}
-
-export function uploadToStorage(url: string, file: File, contentType: string, onProgress: (ratio: number) => void) {
-  return new Promise<void>((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", publicUploadUrl(url));
-    xhr.setRequestHeader("Content-Type", contentType);
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) onProgress(e.loaded / e.total);
-    };
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) resolve();
-      else {
-        console.error(`[upload] storage responded ${xhr.status}`, xhr.responseText);
-        reject(new Error("upload_failed"));
-      }
-    };
-    xhr.onerror = () => {
-      console.error("[upload] network error while uploading to storage");
-      reject(new Error("upload_failed"));
-    };
-    xhr.send(file);
-  });
-}
+export { uploadToStorage } from "@/shared/api";

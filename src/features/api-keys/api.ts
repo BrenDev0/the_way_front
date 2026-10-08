@@ -32,7 +32,7 @@ export interface IssueApiKeyInput {
 }
 
 const errors = {
-  api_key_account_id_required: "CX necesita un ID de ubicación.",
+  api_key_account_id_required: "El CX necesita un ID de ubicación.",
   api_key_model_provider_mismatch: "El modelo no corresponde al proveedor.",
   api_key_model_not_supported: "Este proveedor no admite modelos.",
   user_not_found: "El operador ya no está disponible.",

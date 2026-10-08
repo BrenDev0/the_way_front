@@ -37,7 +37,7 @@ export default function InviteWelcomePage() {
         <div className="invite-welcome__detail">
           <span className="invite-welcome__number">03 / CONOCIMIENTO</span>
           <strong>Contexto compartido</strong>
-          <span>El agente puede consultar las fuentes entrenadas de tu organización.</span>
+          <span>El agente puede consultar las fuentes y la biblioteca de marcas de tu organización.</span>
         </div>
       </section>
 
