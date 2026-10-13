@@ -10,9 +10,9 @@ export function ApiKeysStat() {
 
   return (
     <StatTile
-      label="llaves api"
+      label="Llaves API"
       value={data?.length}
-      detail={providers.length ? providers.join(" · ") : "ninguna asignada"}
+      detail={providers.length ? providers.join(" · ") : "Ninguna asignada"}
       loading={loading}
       failed={Boolean(error) && !data}
     />

@@ -43,17 +43,17 @@ export function KnowledgeOverview() {
         <div>
           <span className="knowledge-overview__flow-label">FUENTES COMPARTIDAS</span>
           <strong>{loading || unavailable ? "--" : String(total).padStart(2, "0")}</strong>
-          <span className="knowledge-overview__flow-note">de la organización</span>
+          <span className="knowledge-overview__flow-note">De la organización</span>
         </div>
         <div>
           <span className="knowledge-overview__flow-label">PROCESANDO</span>
           <strong>{loading || unavailable ? "--" : String(processing).padStart(2, "0")}</strong>
-          <span className="knowledge-overview__flow-note">extrayendo su texto</span>
+          <span className="knowledge-overview__flow-note">Extrayendo su texto</span>
         </div>
         <div>
           <span className="knowledge-overview__flow-label">DISPONIBLES PARA EL AGENTE</span>
           <strong>{loading || unavailable ? "--" : String(trained).padStart(2, "0")}</strong>
-          <span className="knowledge-overview__flow-note">en el contexto compartido</span>
+          <span className="knowledge-overview__flow-note">En el contexto compartido</span>
         </div>
       </div>
     </section>

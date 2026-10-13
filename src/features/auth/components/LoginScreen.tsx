@@ -38,11 +38,11 @@ export function LoginScreen() {
     <AuthShell>
       <TerminalBox
         title={<Scramble text="AUTH :: ACCESO" />}
-        status={busy ? "handshake en progreso" : "esperando credenciales"}
+        status={busy ? "Handshake en progreso" : "Esperando credenciales"}
       >
         <form className="stack" onSubmit={onSubmit} noValidate>
           <Field
-            label="correo"
+            label="Correo"
             type="email"
             autoComplete="email"
             placeholder="admin@dominio.io"
@@ -52,7 +52,7 @@ export function LoginScreen() {
             required
           />
           <Field
-            label="contraseña"
+            label="Contraseña"
             revealable
             autoComplete="current-password"
             placeholder="••••••••"
@@ -70,7 +70,10 @@ export function LoginScreen() {
           </button>
         </form>
         <p className="switch">
-          ¿sin identidad? <Link href="/signup">crea una ❯</Link>
+          ¿Sin identidad? <Link href="/signup">Crea una ❯</Link>
+        </p>
+        <p className="switch">
+          ¿Eres operador? <Link href="/download">Descarga la app de escritorio ❯</Link>
         </p>
       </TerminalBox>
     </AuthShell>

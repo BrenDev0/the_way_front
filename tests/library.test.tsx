@@ -88,10 +88,10 @@ describe("library", () => {
     await screen.findByRole("list", { name: "Marcas" });
 
     await userEvent.type(screen.getByLabelText("Nueva marca"), "Café Luna");
-    await userEvent.click(screen.getByRole("button", { name: "crear" }));
+    await userEvent.click(screen.getByRole("button", { name: "Crear marca" }));
 
     expect(bodies(`projects/${LIBRARY.id}/folders`, "POST")).toEqual([{ name: "Café Luna", parentId: null }]);
-    expect(await screen.findByText("esta marca todavía no tiene archivos.")).toBeInTheDocument();
+    expect(await screen.findByText("Esta marca todavía no tiene archivos.")).toBeInTheDocument();
   });
 });
 
@@ -99,12 +99,12 @@ describe("knowledge documents", () => {
   it("are available without training and can be given a brand from the library", async () => {
     render(<DocumentsTable />);
 
-    expect(await screen.findByText("disponible")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "editar" }));
+    expect(await screen.findByText("Disponible")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Editar" }));
     const brand = await screen.findByRole("combobox");
     await waitFor(() => expect(within(brand).getAllByRole("option").map((o) => o.textContent)).toContain("Soullens"));
     await userEvent.selectOptions(brand, "Soullens");
-    await userEvent.click(screen.getByRole("button", { name: "guardar" }));
+    await userEvent.click(screen.getByRole("button", { name: "Guardar" }));
 
     expect(bodies("documents/d1", "PATCH")).toEqual([{ title: "Manual Soullens", description: "", brand: "Soullens" }]);
     expect(await screen.findByText("Soullens", { selector: ".doclist__brand" })).toBeInTheDocument();

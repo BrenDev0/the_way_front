@@ -4,9 +4,9 @@ import { useState } from "react";
 import { errorMessage, revalidate } from "@/shared/api";
 import { Busy, ConfirmButton, TerminalBox } from "@/shared/ui";
 import { saveSkill, type Skill } from "../api";
-import { MAX_DESCRIPTION_CHARS, draftProblem, parseSkill } from "../draft";
+import { MAX_DESCRIPTION_CHARS, MAX_TRIGGERS, cleanTriggers, draftProblem, parseSkill } from "../draft";
 
-const TEMPLATE = "---\nname: \ndescription: \n---\n\n";
+const TEMPLATE = "---\nname: \ndescription: \ntriggers:\n  - \n---\n\n";
 
 interface SkillEditorProps {
   draft: string;
@@ -20,6 +20,7 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ error: boolean; message: string } | null>(null);
   const parsed = parseSkill(draft);
+  const triggers = cleanTriggers(parsed.triggers);
   const problem = draft.trim() ? draftProblem(parsed) : null;
   const name = parsed.name?.toLowerCase();
   const replacing = Boolean(name && skills?.some((skill) => skill.name === name));
@@ -41,7 +42,7 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
   }
 
   return (
-    <TerminalBox wide title="02 / BORRADOR" status={dirty ? "cambios sin guardar" : draft.trim() ? "sin cambios" : "vacío"}>
+    <TerminalBox wide title="02 / BORRADOR" status={dirty ? "Cambios sin guardar" : draft.trim() ? "Sin cambios" : "Vacío"}>
       <div className="stack skill-editor">
         <div className="skill-editor__meta">
           <span>
@@ -51,6 +52,10 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
           <span>
             <span className="console-section-label">DESCRIPCIÓN · {(parsed.description ?? "").length}/{MAX_DESCRIPTION_CHARS}</span>
             <span>{parsed.description || "—"}</span>
+          </span>
+          <span className="skill-editor__triggers">
+            <span className="console-section-label">TRIGGERS · {triggers.length}/{MAX_TRIGGERS}</span>
+            <span>{triggers.length ? triggers.map((trigger) => `“${trigger}”`).join(" · ") : "— Añade en el encabezado frases como las diría alguien que necesita esta skill"}</span>
           </span>
         </div>
         <label className="field">
@@ -75,15 +80,15 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
         <div className="skill-editor__actions">
           {!draft.trim() ? (
             <button type="button" className="linkbtn" onClick={() => onChange(TEMPLATE)}>
-              usar plantilla
+              Usar plantilla
             </button>
           ) : dirty ? (
             <ConfirmButton question="¿Descartar el borrador?" onConfirm={() => onChange("")} disabled={saving}>
-              vaciar editor
+              Vaciar editor
             </ConfirmButton>
           ) : (
             <button type="button" className="linkbtn" onClick={() => onChange("")} disabled={saving}>
-              vaciar editor
+              Vaciar editor
             </button>
           )}
           <button type="button" className="btn btn--small" onClick={save} disabled={saving || Boolean(problem) || !draft.trim()}>

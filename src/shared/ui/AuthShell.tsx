@@ -9,7 +9,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
         <div className="byline">BY XPLORERS</div>
       </div>
       {children}
-      <p className="footer">the way · v0.1</p>
+      <p className="footer">THE WAY · v0.1</p>
     </main>
   );
 }

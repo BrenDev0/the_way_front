@@ -14,14 +14,14 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { label: "inicio", href: "/home", icon: "⌂" },
-  { label: "mi cx", href: "/cx", icon: "◫" },
-  { label: "conocimiento", href: "/knowledge", icon: "▤" },
-  { label: "biblioteca", href: "/library", icon: "▣" },
-  { label: "operadores", href: "/members", icon: "◎" },
-  { label: "skills", href: "/skills", icon: "◇" },
-  { label: "llaves api", href: "/api-keys", icon: "⚿" },
-  { label: "organización", href: "/organization", icon: "▦" },
+  { label: "Inicio", href: "/home", icon: "⌂" },
+  { label: "Mi CX", href: "/cx", icon: "◫" },
+  { label: "Conocimiento", href: "/knowledge", icon: "▤" },
+  { label: "Biblioteca", href: "/library", icon: "▣" },
+  { label: "Operadores", href: "/members", icon: "◎" },
+  { label: "Skills", href: "/skills", icon: "◇" },
+  { label: "Llaves API", href: "/api-keys", icon: "⚿" },
+  { label: "Organización", href: "/organization", icon: "▦" },
 ];
 
 export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
@@ -54,7 +54,7 @@ export function Sidebar({ onSignOut }: { onSignOut: () => Promise<void> }) {
                   {item.icon}
                 </span>
                 {item.label}
-                <span className="nav__tag">pronto</span>
+                <span className="nav__tag">Pronto</span>
               </span>
             );
           }

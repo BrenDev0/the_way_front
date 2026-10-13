@@ -23,6 +23,8 @@ The UI shows only the masked key returned by the backend and clears secret input
 
 Owners and admins manage skills in **skills**. The coworking chat uses the regular conversations API: the first message carries a hidden brief (`src/features/skills/draft.ts`) asking the agent to write the whole skill file inside a four-backtick `skill` fence, and any hand edits in the editor are sent along with the next message. Drafts load into the editor automatically unless it has unsaved edits. The agent never saves anything; the user saves from the editor. `.md` uploads are saved directly (name and description come from the frontmatter, or the name from the filename) and replace a skill with the same name. The client-side validation mirrors `src/skills/config.py` in the backend.
 
+A skill's header can list `triggers:` — requests phrased the way a person would say them, which the agent sees beside the description. **Importar kit** takes a whole folder: every `SKILL.md` (only those `skills.json` lists, when there is one) with the text files of its folder as reference files the agent reads on demand. Nothing is saved until confirmed, and the backend saves all of the chosen skills or none. Saving a skill from the editor keeps its reference files.
+
 ## Design system
 
 `src/app/theme.css` holds the tokens shared with THE WAY Desktop: brand colours, surfaces, text colours, font stacks, and effect levels. It is the canonical copy; the desktop app syncs it with `npm run theme:sync` and fails `npm run theme:check` if it drifts.

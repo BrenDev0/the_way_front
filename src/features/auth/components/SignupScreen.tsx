@@ -122,27 +122,27 @@ export function SignupScreen() {
     <AuthShell>
       <TerminalBox
         title={<Scramble text={step === "email" ? "IDENTIDAD :: SOLICITUD" : "IDENTIDAD :: VERIFICACIÓN"} />}
-        status={step === "email" ? "paso 1/2 · identificar" : "paso 2/2 · verificar"}
+        status={step === "email" ? "Paso 1/2 · identificar" : "Paso 2/2 · verificar"}
       >
         <div className="stack">
           <div className="steps" aria-hidden="true">
             <span className={step === "email" ? "steps__item--active" : "steps__item--done"}>
-              {step === "email" ? "[01]" : "[✓]"} identificar
+              {step === "email" ? "[01]" : "[✓]"} Identificar
             </span>
             <span className="steps__line" />
-            <span className={step === "verify" ? "steps__item--active" : ""}>[02] verificar</span>
+            <span className={step === "verify" ? "steps__item--active" : ""}>[02] Verificar</span>
           </div>
 
           {step === "email" ? (
             <form className="stack" onSubmit={onRequestCode} noValidate>
               <Field
-                label="correo"
+                label="Correo"
                 type="email"
                 autoComplete="email"
                 placeholder="operador@dominio.io"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                hint="enviaremos un código de acceso de 6 dígitos a este correo"
+                hint="Enviaremos un código de acceso de 6 dígitos a este correo"
                 autoFocus
                 required
               />
@@ -163,7 +163,7 @@ export function SignupScreen() {
                 </p>
               )}
               <Field
-                label="código de verificación"
+                label="Código de verificación"
                 className="field__input--code"
                 inputMode="numeric"
                 autoComplete="one-time-code"
@@ -174,10 +174,10 @@ export function SignupScreen() {
                 hint={
                   <span className="row-between">
                     <span className={remaining > 0 ? "" : "warn"}>
-                      {remaining > 0 ? `expira en ${formatCountdown(remaining)}` : "código expirado"}
+                      {remaining > 0 ? `Expira en ${formatCountdown(remaining)}` : "Código expirado"}
                     </span>
                     <button type="button" className="linkbtn" onClick={onResend} disabled={resending || busy}>
-                      {resending ? "reenviando..." : "reenviar código"}
+                      {resending ? "Reenviando..." : "Reenviar código"}
                     </button>
                   </span>
                 }
@@ -185,25 +185,25 @@ export function SignupScreen() {
                 required
               />
               <Field
-                label="organización"
+                label="Organización"
                 autoComplete="organization"
-                placeholder="xplorers"
+                placeholder="Xplorers"
                 value={organizationName}
                 onChange={(e) => setOrganizationName(e.target.value)}
                 required
               />
               <Field
-                label="contraseña"
+                label="Contraseña"
                 revealable
                 autoComplete="new-password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                hint={`mínimo ${MIN_PASSWORD} caracteres`}
+                hint={`Mínimo ${MIN_PASSWORD} caracteres`}
                 required
               />
               <Field
-                label="confirmar contraseña"
+                label="Confirmar contraseña"
                 revealable
                 autoComplete="new-password"
                 placeholder="••••••••"
@@ -222,14 +222,14 @@ export function SignupScreen() {
               <div className="row-between">
                 <span>{email.trim()}</span>
                 <button type="button" className="linkbtn" onClick={backToEmail} disabled={busy}>
-                  cambiar correo
+                  Cambiar correo
                 </button>
               </div>
             </form>
           )}
         </div>
         <p className="switch">
-          ¿ya tienes acceso? <Link href="/login">inicia sesión ❯</Link>
+          ¿Ya tienes acceso? <Link href="/login">Inicia sesión ❯</Link>
         </p>
       </TerminalBox>
     </AuthShell>

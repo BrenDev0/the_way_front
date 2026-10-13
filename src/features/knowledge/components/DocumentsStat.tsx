@@ -10,14 +10,14 @@ export function DocumentsStat() {
 
   return (
     <StatTile
-      label="documentos"
+      label="Documentos"
       value={
         <>
           {trained}
           <span className="stat__of">/{data?.length ?? 0}</span>
         </>
       }
-      detail={`disponibles · máx ${DOCUMENT_LIMIT}`}
+      detail={`Disponibles · máx ${DOCUMENT_LIMIT}`}
       loading={loading}
       failed={Boolean(error) && !data}
     />

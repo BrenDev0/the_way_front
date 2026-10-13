@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from "react";
 import { ApiError, errorMessage, uploadToStorage } from "@/shared/api";
 import { formatBytes } from "@/shared/format";
-import { ConfirmButton, Spinner, TerminalBox } from "@/shared/ui";
+import { ConfirmButton, Field, Spinner, TerminalBox } from "@/shared/ui";
 import {
   MAX_BYTES,
   agentPath,
@@ -62,7 +62,7 @@ export function LibraryWorkspace() {
   if (!library || loading) {
     return (
       <p className="empty">
-        <Spinner /> cargando biblioteca
+        <Spinner /> Cargando biblioteca
       </p>
     );
   }
@@ -78,7 +78,7 @@ export function LibraryWorkspace() {
             onError={(message) => setFeedback({ tone: "error", message })}
           />
           {brands.length === 0 ? (
-            <p className="empty">crea una marca por cliente para empezar.</p>
+            <p className="empty">Crea una marca por cliente para empezar.</p>
           ) : (
             <ul className="library__brands" aria-label="Marcas">
               {brands.map((brand) => (
@@ -116,7 +116,7 @@ export function LibraryWorkspace() {
           />
         ) : (
           <TerminalBox wide title="ARCHIVOS">
-            <p className="empty">elige o crea una marca para subir sus logos, imágenes y manual.</p>
+            <p className="empty">Elige o crea una marca para subir sus logos, imágenes y manual.</p>
           </TerminalBox>
         )}
       </div>
@@ -147,12 +147,17 @@ function BrandCreator({ library, onCreated, onError }: { library: Library; onCre
 
   return (
     <form className="library__new" onSubmit={submit}>
-      <label className="sr-only" htmlFor="new-brand">
-        Nueva marca
-      </label>
-      <input id="new-brand" className="field__input" placeholder="nueva marca" value={name} maxLength={120} onChange={(e) => setName(e.target.value)} />
+      <Field
+        label="Nueva marca"
+        placeholder="SLS"
+        value={name}
+        maxLength={120}
+        autoComplete="off"
+        onChange={(e) => setName(e.target.value)}
+        hint="El código con que se pide la marca en el chat"
+      />
       <button className="btn btn--small" type="submit" disabled={busy || !name.trim()}>
-        crear
+        {busy ? "Creando…" : "Crear marca"}
       </button>
     </form>
   );
@@ -257,17 +262,17 @@ function BrandPanel({
   const uploading = items.some((item) => item.state === "queued" || item.state === "uploading");
 
   return (
-    <TerminalBox wide title={brand.folder.name.toUpperCase()} status={uploading ? "transmitiendo" : `${brand.files.length} archivos`}>
+    <TerminalBox wide title={brand.folder.name.toUpperCase()} status={uploading ? "Transmitiendo" : `${brand.files.length} archivos`}>
       <div className="stack">
         <div className="toolbar">
           <span className="toolbar__info">
-            el agente usa estos archivos solo cuando la conversación es sobre <strong>{brand.folder.name}</strong>
+            El agente usa estos archivos solo cuando la conversación es sobre <strong>{brand.folder.name}</strong>
           </span>
           <ConfirmButton
-            question={brand.files.length ? `¿eliminar la marca y sus ${brand.files.length} archivos?` : "¿eliminar la marca?"}
+            question={brand.files.length ? `¿Eliminar la marca y sus ${brand.files.length} archivos?` : "¿Eliminar la marca?"}
             onConfirm={removeBrand}
           >
-            eliminar marca
+            Eliminar marca
           </ConfirmButton>
         </div>
 
@@ -288,7 +293,7 @@ function BrandPanel({
           <span className="dropzone__glyph" aria-hidden="true">
             ⇪
           </span>
-          <span className="dropzone__title">{dragging ? "suelta para añadir" : `arrastra logos, imágenes o el manual de ${brand.folder.name}`}</span>
+          <span className="dropzone__title">{dragging ? "Suelta para añadir" : `Arrastra logos, imágenes o el manual de ${brand.folder.name}`}</span>
           <span className="dropzone__hint">png · jpg · svg · webp · pdf · fuentes — máx 200 MB</span>
           <input
             ref={inputRef}
@@ -310,9 +315,9 @@ function BrandPanel({
                 <span className="upload__name">{item.file.name}</span>
                 <span className="upload__size">{formatBytes(item.file.size)}</span>
                 <span className="upload__state">
-                  {item.state === "queued" && "en cola"}
+                  {item.state === "queued" && "En cola"}
                   {item.state === "uploading" && `${Math.round(item.progress * 100)}%`}
-                  {item.state === "done" && "✓ subido"}
+                  {item.state === "done" && "✓ Subido"}
                   {item.state === "error" && (item.message ?? UPLOAD_FAILED)}
                 </span>
               </li>
@@ -321,7 +326,7 @@ function BrandPanel({
         )}
 
         {brand.files.length === 0 ? (
-          <p className="empty">esta marca todavía no tiene archivos.</p>
+          <p className="empty">Esta marca todavía no tiene archivos.</p>
         ) : (
           <ul className="library__grid" aria-label={`Archivos de ${brand.folder.name}`}>
             {brand.files.map((file) => (
@@ -335,10 +340,10 @@ function BrandPanel({
                 <span className="library__meta">{formatBytes(file.sizeBytes)}</span>
                 <span className="library__actions">
                   <button type="button" className="linkbtn" onClick={() => copyPath(file)} title="Copia la ruta para pedirle al agente que lo use">
-                    copiar ruta
+                    Copiar ruta
                   </button>
-                  <ConfirmButton question="¿eliminar?" onConfirm={() => removeFile(file)}>
-                    eliminar
+                  <ConfirmButton question="¿Eliminar?" onConfirm={() => removeFile(file)}>
+                    Eliminar
                   </ConfirmButton>
                 </span>
               </li>
@@ -346,7 +351,7 @@ function BrandPanel({
           </ul>
         )}
         <p className="library__hint">
-          los manuales de marca en PDF súbelos también en <a href="/knowledge">conocimiento</a> y asígnales esta marca, para que el agente pueda leer su texto.
+          Los manuales de marca en PDF súbelos también en <a href="/knowledge">conocimiento</a> y asígnales esta marca, para que el agente pueda leer su texto.
         </p>
       </div>
     </TerminalBox>

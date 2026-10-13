@@ -68,7 +68,7 @@ describe("organization settings", () => {
     const orphans = await screen.findByRole("list", { name: "Proyectos sin dueño" });
 
     await userEvent.selectOptions(within(orphans).getByLabelText("Nuevo dueño de Proyectos de Carla"), "u-admin");
-    await userEvent.click(within(orphans).getByRole("button", { name: "asignar" }));
+    await userEvent.click(within(orphans).getByRole("button", { name: "Asignar" }));
 
     await waitFor(() => expect(calls("projects/management/p-orphan/transfer", "POST")).toHaveLength(1));
     expect(JSON.parse(calls("projects/management/p-orphan/transfer", "POST")[0][1].body)).toEqual({ newOwnerId: "u-admin" });
@@ -77,7 +77,7 @@ describe("organization settings", () => {
   it("estimates cost from the prices written in, with cached reads at their own price", async () => {
     render(<OrganizationSettings />);
     const usage = (await screen.findByRole("heading", { name: "USO DE IA" })).closest("section")!;
-    expect(await within(usage).findByText("escribe los precios de entrada y salida abajo")).toBeInTheDocument();
+    expect(await within(usage).findByText("Escribe los precios de entrada y salida abajo")).toBeInTheDocument();
 
     await userEvent.type(within(usage).getByLabelText("Precio de entrada"), "3");
     await userEvent.type(within(usage).getByLabelText("Precio de salida"), "15");
@@ -97,14 +97,14 @@ describe("organization settings", () => {
   it("deletes the organization only after its exact name is typed", async () => {
     render(<OrganizationSettings />);
     const danger = (await screen.findByRole("heading", { name: "ZONA DE PELIGRO" })).closest("section")!;
-    const button = within(danger).getByRole("button", { name: "eliminar la organización" });
+    const button = within(danger).getByRole("button", { name: "Eliminar la organización" });
     expect(button).toBeDisabled();
 
-    await waitFor(() => expect(within(danger).getByLabelText(/escribe “Soul Lens Studios” para confirmar/)).toBeInTheDocument());
-    await userEvent.type(within(danger).getByLabelText(/escribe “Soul Lens Studios” para confirmar/), "soul lens studios");
+    await waitFor(() => expect(within(danger).getByLabelText(/Escribe “Soul Lens Studios” para confirmar/)).toBeInTheDocument());
+    await userEvent.type(within(danger).getByLabelText(/Escribe “Soul Lens Studios” para confirmar/), "soul lens studios");
     expect(button).toBeDisabled();
-    await userEvent.clear(within(danger).getByLabelText(/escribe “Soul Lens Studios” para confirmar/));
-    await userEvent.type(within(danger).getByLabelText(/escribe “Soul Lens Studios” para confirmar/), "Soul Lens Studios");
+    await userEvent.clear(within(danger).getByLabelText(/Escribe “Soul Lens Studios” para confirmar/));
+    await userEvent.type(within(danger).getByLabelText(/Escribe “Soul Lens Studios” para confirmar/), "Soul Lens Studios");
     expect(button).toBeEnabled();
   });
 

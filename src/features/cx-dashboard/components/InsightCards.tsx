@@ -30,18 +30,18 @@ function Figures({ items }: { items: { label: string; value: string; note?: stri
 type Measure = "leads" | "opportunities" | "wonValue" | "revenue";
 
 const MEASURES: { value: Measure; label: string }[] = [
-  { value: "leads", label: "leads" },
-  { value: "opportunities", label: "oportunidades" },
-  { value: "wonValue", label: "ganado" },
-  { value: "revenue", label: "cobrado" },
+  { value: "leads", label: "Leads" },
+  { value: "opportunities", label: "Oportunidades" },
+  { value: "wonValue", label: "Ganado" },
+  { value: "revenue", label: "Cobrado" },
 ];
 
 function compared(comparison: Comparison | null, format: (value: number) => string) {
   if (!comparison || comparison.lastMonth === null) return [];
   return [
-    { label: "último mes completo", value: format(comparison.lastMonth) },
-    { label: "vs mes anterior", value: change(comparison.monthOverMonth) ?? "—" },
-    { label: "vs mismo mes del año pasado", value: change(comparison.yearOverYear) ?? "—" },
+    { label: "Último mes completo", value: format(comparison.lastMonth) },
+    { label: "Vs mes anterior", value: change(comparison.monthOverMonth) ?? "—" },
+    { label: "Vs mismo mes del año pasado", value: change(comparison.yearOverYear) ?? "—" },
   ];
 }
 
@@ -54,7 +54,7 @@ export function GrowthCard({ growth }: { growth: Growth }) {
 
   return (
     <div className="stack">
-      <Segmented label="medir" value={measure} options={MEASURES} onChange={setMeasure} />
+      <Segmented label="Medir" value={measure} options={MEASURES} onChange={setMeasure} />
       {locked ? (
         <p className="cx__note">
           Para ver lo cobrado mes a mes, activa <code>{growth.revenueScope}</code> en la integración privada.
@@ -68,9 +68,9 @@ export function GrowthCard({ growth }: { growth: Growth }) {
             format={format}
           />
           <Figures items={compared(growth[measure], format)} />
-          <p className="cx__note">el último mes está en curso: se muestra más claro y no entra en las comparaciones.</p>
+          <p className="cx__note">El último mes está en curso: se muestra más claro y no entra en las comparaciones.</p>
           {measure === "wonValue" && growth.months.every((m) => m.won === 0) && (
-            <p className="cx__note">ninguna oportunidad se marcó como ganada en este año: márcalas al cerrar para ver crecer las ventas.</p>
+            <p className="cx__note">Ninguna oportunidad se marcó como ganada en este año: márcalas al cerrar para ver crecer las ventas.</p>
           )}
         </>
       )}
@@ -83,27 +83,27 @@ export function GrowthCard({ growth }: { growth: Growth }) {
 export function ConversionCard({ conversion }: { conversion: Conversion }) {
   return (
     <div className="stack">
-      <span className="cx__subtitle">leads del periodo, hasta la venta</span>
+      <span className="cx__subtitle">Leads del periodo, hasta la venta</span>
       <RankedBars
         label="Embudo de conversión"
         rows={[
-          { name: "leads", value: conversion.leads },
-          { name: "con oportunidad", value: conversion.withOpportunity },
-          { name: "compraron", value: conversion.customers },
+          { name: "Leads", value: conversion.leads },
+          { name: "Con oportunidad", value: conversion.withOpportunity },
+          { name: "Compraron", value: conversion.customers },
         ]}
         detail={(row) =>
-          row.name === "con oportunidad" ? share(conversion.leadToOpportunity) : row.name === "compraron" ? share(conversion.leadToCustomer) : null
+          row.name === "Con oportunidad" ? share(conversion.leadToOpportunity) : row.name === "Compraron" ? share(conversion.leadToCustomer) : null
         }
-        empty="no entraron leads en este periodo"
+        empty="No entraron leads en este periodo"
       />
       <Figures
         items={[
-          { label: "lead → oportunidad", value: share(conversion.leadToOpportunity) },
-          { label: "oportunidad → venta", value: share(conversion.opportunityToCustomer) },
+          { label: "Lead → oportunidad", value: share(conversion.leadToOpportunity) },
+          { label: "Oportunidad → venta", value: share(conversion.opportunityToCustomer) },
           {
-            label: "ciclo de venta",
+            label: "Ciclo de venta",
             value: conversion.cycleDays === null ? "—" : `${conversion.cycleDays.toLocaleString("es-MX")} días`,
-            note: conversion.cycleSample ? `mediana de ${count(conversion.cycleSample)} ganadas en el año` : "sin ventas ganadas en el año",
+            note: conversion.cycleSample ? `Mediana de ${count(conversion.cycleSample)} ganadas en el año` : "Sin ventas ganadas en el año",
           },
         ]}
       />
@@ -114,15 +114,15 @@ export function ConversionCard({ conversion }: { conversion: Conversion }) {
 // --- first response -------------------------------------------------------------------
 
 export function ResponseCard({ response, users = {} }: { response: ResponseTimes; users?: Record<string, string> }) {
-  if (!response.messages) return <p className="empty">ningún cliente escribió en las conversaciones recientes del periodo.</p>;
+  if (!response.messages) return <p className="empty">Ningún cliente escribió en las conversaciones recientes del periodo.</p>;
   return (
     <div className="stack">
       <Figures
         items={[
-          { label: "primera respuesta (mediana)", value: response.medianHours === null ? "—" : waited(response.medianHours) },
-          { label: "contestadas en < 1 h", value: share(response.within1h) },
-          { label: "en < 24 h", value: share(response.within24h) },
-          { label: "sin contestar", value: count(response.unanswered) },
+          { label: "Primera respuesta (mediana)", value: response.medianHours === null ? "—" : waited(response.medianHours) },
+          { label: "Contestadas en < 1 h", value: share(response.within1h) },
+          { label: "En < 24 h", value: share(response.within24h) },
+          { label: "Sin contestar", value: count(response.unanswered) },
         ]}
       />
       {response.instantShare !== null && response.instantShare > 0 && (
@@ -134,7 +134,7 @@ export function ResponseCard({ response, users = {} }: { response: ResponseTimes
             : "Sin contarlas no queda ninguna respuesta de una persona."}
         </p>
       )}
-      <span className="cx__subtitle">mediana por canal</span>
+      <span className="cx__subtitle">Mediana por canal</span>
       <RankedBars
         label="Primera respuesta por canal, en minutos"
         rows={response.byChannel.map((c) => ({ name: c.name, value: Math.round(c.medianHours * 60) }))}
@@ -148,9 +148,9 @@ export function ResponseCard({ response, users = {} }: { response: ResponseTimes
         <table className="cx__table">
           <thead>
             <tr>
-              <th scope="col">quién respondió</th>
-              <th scope="col">mediana</th>
-              <th scope="col">respuestas</th>
+              <th scope="col">Quién respondió</th>
+              <th scope="col">Mediana</th>
+              <th scope="col">Respuestas</th>
             </tr>
           </thead>
           <tbody>
@@ -164,7 +164,7 @@ export function ResponseCard({ response, users = {} }: { response: ResponseTimes
           </tbody>
         </table>
       )}
-      <p className="cx__note">medido en las {count(response.sampled)} conversaciones más recientes del periodo.</p>
+      <p className="cx__note">Medido en las {count(response.sampled)} conversaciones más recientes del periodo.</p>
     </div>
   );
 }
@@ -176,7 +176,7 @@ export function AdsCard({ ads, days }: { ads: Ads; days: PeriodDays }) {
   if (!ads.ads.length) {
     return (
       <p className="empty">
-        ninguno de los {count(ads.leads)} leads del periodo trae el anuncio que lo trajo. prueba con 90 días, o revisa que tus anuncios usen el seguimiento del
+        Ninguno de los {count(ads.leads)} leads del periodo trae el anuncio que lo trajo. Prueba con 90 días, o revisa que tus anuncios usen el seguimiento del
         CX.
       </p>
     );
@@ -196,11 +196,11 @@ export function AdsCard({ ads, days }: { ads: Ads; days: PeriodDays }) {
       <table className="cx__table">
         <thead>
           <tr>
-            <th scope="col">anuncio</th>
-            <th scope="col">leads</th>
-            <th scope="col">→ oportunidad</th>
-            <th scope="col">ganados</th>
-            <th scope="col">valor</th>
+            <th scope="col">Anuncio</th>
+            <th scope="col">Leads</th>
+            <th scope="col">→ Oportunidad</th>
+            <th scope="col">Ganados</th>
+            <th scope="col">Valor</th>
           </tr>
         </thead>
         <tbody>
@@ -221,14 +221,14 @@ export function AdsCard({ ads, days }: { ads: Ads; days: PeriodDays }) {
       </table>
       {ads.campaigns && ads.campaigns.length > 0 && (
         <>
-          <span className="cx__subtitle">por campaña (utm_campaign)</span>
+          <span className="cx__subtitle">Por campaña (utm_campaign)</span>
           <RankedBars label="Leads por campaña" rows={ads.campaigns.map((c) => ({ name: c.name, value: c.leads }))} detail={(row) => {
             const campaign = ads.campaigns?.find((c) => c.name === row.name);
             return campaign ? `${count(campaign.opportunities)} oportunidades · ${count(campaign.won)} ganados` : null;
           }} />
         </>
       )}
-      <p className="cx__note">el gasto vive en la plataforma de anuncios; aquí se ve qué anuncios traen gente que compra. abre un anuncio para ver sus leads.</p>
+      <p className="cx__note">El gasto vive en la plataforma de anuncios; aquí se ve qué anuncios traen gente que compra. Abre un anuncio para ver sus leads.</p>
       {open && <AdPanel name={open} days={days} onClose={() => setOpen(null)} />}
     </div>
   );
@@ -240,23 +240,23 @@ export function RetentionCard({ retention }: { retention: Retention }) {
   return (
     <div className="stack">
       {retention.customers === 0 ? (
-        <p className="empty">no hay pagos registrados en el CX este año, así que no hay clientes que medir.</p>
+        <p className="empty">No hay pagos registrados en el CX este año, así que no hay clientes que medir.</p>
       ) : (
         <Figures
           items={[
-            { label: "clientes en el año", value: count(retention.customers) },
-            { label: "volvieron a comprar", value: share(retention.repeatRate), note: `${count(retention.repeatCustomers)} clientes` },
-            { label: "valor por cliente", value: retention.valuePerCustomer === null ? "—" : money(retention.valuePerCustomer) },
-            { label: "ventas de clientes que regresan", value: share(retention.returningShare), note: "del periodo" },
+            { label: "Clientes en el año", value: count(retention.customers) },
+            { label: "Volvieron a comprar", value: share(retention.repeatRate), note: `${count(retention.repeatCustomers)} clientes` },
+            { label: "Valor por cliente", value: retention.valuePerCustomer === null ? "—" : money(retention.valuePerCustomer) },
+            { label: "Ventas de clientes que regresan", value: share(retention.returningShare), note: "Del periodo" },
           ]}
         />
       )}
       {retention.subscriptions ? (
         <Figures
           items={[
-            { label: "suscripciones activas", value: count(retention.subscriptions.active) },
-            { label: "ingreso recurrente mensual", value: money(retention.subscriptions.mrr) },
-            { label: "cancelaciones", value: count(retention.subscriptions.cancelled), note: share(retention.subscriptions.churnRate) },
+            { label: "Suscripciones activas", value: count(retention.subscriptions.active) },
+            { label: "Ingreso recurrente mensual", value: money(retention.subscriptions.mrr) },
+            { label: "Cancelaciones", value: count(retention.subscriptions.cancelled), note: share(retention.subscriptions.churnRate) },
           ]}
         />
       ) : (
@@ -280,7 +280,7 @@ function npsVerdict(score: number | null) {
 
 export function NpsCard({ nps }: { nps: Nps }) {
   if (!nps.responses) {
-    return <p className="empty">la encuesta {nps.survey ? `“${nps.survey}” ` : ""}no tiene respuestas en este periodo.</p>;
+    return <p className="empty">La encuesta {nps.survey ? `“${nps.survey}” ` : ""}no tiene respuestas en este periodo.</p>;
   }
   return (
     <div className="stack">
@@ -294,21 +294,21 @@ export function NpsCard({ nps }: { nps: Nps }) {
       <RankedBars
         label="Promotores, pasivos y detractores"
         rows={[
-          { name: "promotores (9–10)", value: nps.promoters },
-          { name: "pasivos (7–8)", value: nps.passives },
-          { name: "detractores (0–6)", value: nps.detractors },
+          { name: "Promotores (9–10)", value: nps.promoters },
+          { name: "Pasivos (7–8)", value: nps.passives },
+          { name: "Detractores (0–6)", value: nps.detractors },
         ]}
         detail={(row) => share(row.value / nps.responses)}
       />
       {nps.comments.length > 0 && (
         <>
-          <span className="cx__subtitle">lo que dicen</span>
+          <span className="cx__subtitle">Lo que dicen</span>
           <ul className="cx__list">
             {nps.comments.map((c) => (
               <li key={`${c.date}-${c.score}`}>
                 <span className="cx__list-main">
                   <span>“{c.text}”</span>
-                  <span className="cx__muted">{c.name ?? "cliente"}</span>
+                  <span className="cx__muted">{c.name ?? "Cliente"}</span>
                 </span>
                 <span className="cx__list-side">{c.score}/10</span>
               </li>
@@ -320,9 +320,9 @@ export function NpsCard({ nps }: { nps: Nps }) {
         <table className="cx__table">
           <thead>
             <tr>
-              <th scope="col">mes</th>
+              <th scope="col">Mes</th>
               <th scope="col">NPS</th>
-              <th scope="col">respuestas</th>
+              <th scope="col">Respuestas</th>
             </tr>
           </thead>
           <tbody>

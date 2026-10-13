@@ -14,10 +14,10 @@ export function Welcome() {
         <Scramble text="SESIÓN :: ESTABLECIDA" />
       </p>
       <h1 className="welcome__title">
-        ✓ bienvenido, <span className="welcome__email">{user.email}</span>
+        ✓ Bienvenido, <span className="welcome__email">{user.email}</span>
         <span className="cursor" aria-hidden="true" />
       </h1>
-      {organization && <p className="welcome__org">organización · {organization.name}</p>}
+      {organization && <p className="welcome__org">Organización · {organization.name}</p>}
     </header>
   );
 }

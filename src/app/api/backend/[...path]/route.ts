@@ -1,19 +1,12 @@
-import { createHmac } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { API_URL, SIGNING_SECRET, sign } from "@/shared/server/backend";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const API_URL = process.env.API_URL ?? "http://localhost:8000";
-const SIGNING_SECRET = process.env.REQUEST_SIGNING_SECRET ?? "";
 const FORWARDED_REQUEST_HEADERS = ["content-type", "cookie", "accept"];
 const SESSION_COOKIE = "session";
 const SESSION_ERRORS = new Set(["not_authenticated", "invalid_session", "missing_session", "session_not_found"]);
-
-function sign(method: string, pathWithQuery: string, timestamp: string, body: Buffer) {
-  const prefix = Buffer.from(`${method}\n${pathWithQuery}\n${timestamp}\n`, "utf8");
-  return createHmac("sha256", SIGNING_SECRET).update(Buffer.concat([prefix, body])).digest("hex");
-}
 
 function serviceUnavailable() {
   return NextResponse.json({ code: "service_unavailable" }, { status: 503 });

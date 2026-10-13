@@ -8,8 +8,8 @@ export default function OrganizationPage() {
       <div className="dash organization-page">
         <PageHeader
           kicker="ORGANIZACIÓN :: AJUSTES"
-          title="organización"
-          description="nombre, asientos, almacenamiento, proyectos sin dueño, uso de IA y propiedad."
+          title="Organización"
+          description="Nombre, asientos, almacenamiento, proyectos sin dueño, uso de IA y propiedad."
         />
         <OrganizationSettings />
       </div>

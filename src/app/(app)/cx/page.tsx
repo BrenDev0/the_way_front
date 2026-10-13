@@ -8,8 +8,8 @@ export default function CxPage() {
       <div className="dash cx-page">
         <PageHeader
           kicker="NEGOCIO :: MI CX"
-          title="mi cx"
-          description="leads, conversaciones sin contestar, pipeline, ventas y citas de tu cuenta del CX."
+          title="Mi CX"
+          description="Leads, conversaciones sin contestar, pipeline, ventas y citas de tu cuenta del CX."
         />
         <CxDashboard />
       </div>

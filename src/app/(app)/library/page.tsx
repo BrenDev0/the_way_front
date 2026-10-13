@@ -8,8 +8,8 @@ export default function LibraryPage() {
       <div className="dash library-page">
         <PageHeader
           kicker="ORGANIZACIÓN :: BIBLIOTECA"
-          title="biblioteca de marcas"
-          description="logos, imágenes, fuentes y manuales por cliente. el agente los usa en el chat y nunca los modifica."
+          title="Biblioteca de marcas"
+          description="Logos, imágenes, fuentes y manuales por cliente. El agente los usa en el chat y nunca los modifica."
         />
         <LibraryWorkspace />
       </div>

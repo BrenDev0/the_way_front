@@ -24,12 +24,12 @@ export const MAX_BYTES = 64 * 1024 * 1024;
 export const STATUS_ORDER: DocumentStatus[] = ["trained", "extracted", "extracting", "pending", "unsupported", "failed"];
 
 export const STATUS_LABELS: Record<DocumentStatus, string> = {
-  pending: "pendiente",
-  extracting: "extrayendo",
-  extracted: "disponible",
-  trained: "disponible",
-  unsupported: "no soportado",
-  failed: "fallido",
+  pending: "Pendiente",
+  extracting: "Extrayendo",
+  extracted: "Disponible",
+  trained: "Disponible",
+  unsupported: "No soportado",
+  failed: "Fallido",
 };
 
 const MIME_BY_EXTENSION: Record<string, string> = {

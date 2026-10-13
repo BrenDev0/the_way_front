@@ -9,7 +9,7 @@ interface ConfirmButtonProps {
   disabled?: boolean;
 }
 
-export function ConfirmButton({ children, question = "¿seguro?", onConfirm, disabled }: ConfirmButtonProps) {
+export function ConfirmButton({ children, question = "¿Seguro?", onConfirm, disabled }: ConfirmButtonProps) {
   const [asking, setAsking] = useState(false);
   const [working, setWorking] = useState(false);
 
@@ -35,10 +35,10 @@ export function ConfirmButton({ children, question = "¿seguro?", onConfirm, dis
     <span className="confirm">
       <span className="confirm__question">{question}</span>
       <button type="button" className="linkbtn linkbtn--danger" onClick={confirm} disabled={working || disabled}>
-        {working ? "..." : "[sí]"}
+        {working ? "..." : "[Sí]"}
       </button>
       <button type="button" className="linkbtn" onClick={() => setAsking(false)} disabled={working}>
-        [no]
+        [No]
       </button>
     </span>
   );

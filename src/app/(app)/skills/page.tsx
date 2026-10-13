@@ -9,8 +9,8 @@ export default function SkillsPage() {
       <div className="dash skills-page">
         <PageHeader
           kicker="ORGANIZACIÓN :: SKILLS"
-          title="skills del agente"
-          description="instrucciones reutilizables que el agente consulta cuando una tarea coincide. créalas conversando con el agente o sube archivos .md."
+          title="Skills del agente"
+          description="Instrucciones reutilizables que el agente consulta cuando una tarea coincide. Créalas conversando con el agente o sube archivos .md."
         />
         <LlmKeyNotice />
         <SkillsWorkspace />

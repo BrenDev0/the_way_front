@@ -12,15 +12,27 @@ export function setAccountCurrency(currency: string | null | undefined) {
   if (currency) accountCurrency = currency;
 }
 
-/** Money in full up to a million ($25,554), compact past it ($1.2 M). CX does not say the currency of a
+// Compact money is spelled out here rather than left to ICU's compact notation, whose output depends
+// on the runtime's locale data: a small-icu build falls back to English ("$1.3M") and recent CLDR
+// prints "$1.0 M" or "$1250.0 M", so the same amount would read differently per machine.
+const MONEY_UNITS = [
+  { size: 1e12, label: "B" }, // billón: a million millions in Spanish
+  { size: 1e6, label: "M" },
+];
+
+/** Money in full up to a million ($25,554), compact past it ($1.3 M). CX does not say the currency of a
  *  deal, so it is the account's own. */
 export function money(value: number, currency?: string | null) {
-  const options: Intl.NumberFormatOptions =
-    Math.abs(value) >= 1_000_000
-      ? { notation: "compact", maximumFractionDigits: 1 }
-      : { maximumFractionDigits: 0 };
-  const formatted = new Intl.NumberFormat("es-MX", { style: "currency", currency: currency || accountCurrency, currencyDisplay: "narrowSymbol", ...options }).format(value);
-  return formatted;
+  const unit = MONEY_UNITS.find(({ size }) => Math.abs(value) >= size);
+  const format = new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: currency || accountCurrency,
+    currencyDisplay: "narrowSymbol",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: unit ? 1 : 0,
+  });
+  // A no-break space keeps the unit on the amount's line.
+  return unit ? `${format.format(value / unit.size)}\u00a0${unit.label}` : format.format(value);
 }
 
 export function share(value: number | null) {

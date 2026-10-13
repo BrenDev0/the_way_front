@@ -10,9 +10,9 @@ export interface User {
 }
 
 export const ROLE_LABELS: Record<Role, string> = {
-  owner: "propietario",
-  admin: "administrador",
-  member: "operador",
+  owner: "Propietario",
+  admin: "Administrador",
+  member: "Operador",
 };
 
 export const ADMIN_ROLES: Role[] = ["owner", "admin"];

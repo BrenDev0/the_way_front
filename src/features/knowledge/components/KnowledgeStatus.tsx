@@ -20,16 +20,16 @@ export function KnowledgeStatus() {
     <TerminalBox
       wide
       title="CONOCIMIENTO"
-      status={processing ? "procesando documentos" : data ? `${total} documentos` : undefined}
+      status={processing ? "Procesando documentos" : data ? `${total} documentos` : undefined}
     >
       {loading ? (
         <p className="empty">
-          <Spinner /> cargando documentos
+          <Spinner /> Cargando documentos
         </p>
       ) : error && !data ? (
         <p className="alert alert--error">! {errorMessage(error)}</p>
       ) : total === 0 ? (
-        <p className="empty">la base de conocimiento está vacía</p>
+        <p className="empty">La base de conocimiento está vacía</p>
       ) : (
         <ul className="bars">
           {counts.map(({ status, count }) => {

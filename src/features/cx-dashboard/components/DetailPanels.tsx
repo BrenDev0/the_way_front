@@ -108,11 +108,11 @@ function Bubble({ message }: { message: ConversationMessage }) {
       {message.body && <p className="chat__text">{message.body}</p>}
       {message.attachments.map((url) => (
         <a key={url} href={url} target="_blank" rel="noreferrer noopener" className="linkbtn">
-          adjunto ↗
+          Adjunto ↗
         </a>
       ))}
       <span className="chat__meta">
-        {mine && (message.sender ?? (message.automated ? "automático" : "equipo"))}
+        {mine && (message.sender ?? (message.automated ? "Automático" : "Equipo"))}
         {mine && " · "}
         {message.channel} · {when(message.date)}
         {mine && message.status && ` · ${STATUS[message.status] ?? message.status}`}
@@ -164,7 +164,7 @@ export function ConversationPanel({ id, name, onClose }: { id: string; name: str
       if (result.sent) {
         setSent((list) => [
           ...list,
-          { id: result.messageId ?? `sent-${list.length}`, direction: "outbound", kind: "message", channel: data.replyChannel ?? "", body: text, attachments: [], date: new Date().toISOString(), status: "sent", sender: "tú", automated: false },
+          { id: result.messageId ?? `sent-${list.length}`, direction: "outbound", kind: "message", channel: data.replyChannel ?? "", body: text, attachments: [], date: new Date().toISOString(), status: "sent", sender: "Tú", automated: false },
         ]);
         setDraft("");
       } else {
@@ -186,21 +186,21 @@ export function ConversationPanel({ id, name, onClose }: { id: string; name: str
   return (
     <Panel
       title={data?.name ?? name}
-      subtitle={data && [data.phone, data.email, data.assignedTo && `asignado a ${data.assignedTo}`].filter(Boolean).join(" · ")}
+      subtitle={data && [data.phone, data.email, data.assignedTo && `Asignado a ${data.assignedTo}`].filter(Boolean).join(" · ")}
       onClose={onClose}
     >
       {loading ? (
         <p className="empty">
-          <Spinner /> abriendo la conversación
+          <Spinner /> Abriendo la conversación
         </p>
       ) : error && !data ? (
         <p className="alert alert--error">! {errorMessage(error)}</p>
       ) : data ? (
         <div className="chat">
-          {data.tags.length > 0 && <p className="cx__muted">etiquetas: {data.tags.join(", ")}</p>}
+          {data.tags.length > 0 && <p className="cx__muted">Etiquetas: {data.tags.join(", ")}</p>}
           {before && (
             <button type="button" className="linkbtn chat__older" onClick={loadOlder} disabled={loadingOlder}>
-              {loadingOlder ? "cargando…" : "ver mensajes anteriores"}
+              {loadingOlder ? "Cargando…" : "Ver mensajes anteriores"}
             </button>
           )}
           <ul className="chat__messages" aria-label={`Mensajes con ${data.name}`}>
@@ -219,7 +219,7 @@ export function ConversationPanel({ id, name, onClose }: { id: string; name: str
           ) : data.replyType ? (
             <form className="chat__reply" onSubmit={send}>
               <label htmlFor={`reply-${id}`} className="field__label">
-                responder por {data.replyChannel}
+                Responder por {data.replyChannel}
               </label>
               <textarea
                 id={`reply-${id}`}
@@ -239,12 +239,12 @@ export function ConversationPanel({ id, name, onClose }: { id: string; name: str
               <div className="chat__actions">
                 <span className="cx__muted">
                   {data.replyWindow.closesAt
-                    ? `quedan ${waited(Math.max(0, -hoursSince(data.replyWindow.closesAt)))} de la ventana de 24 h · `
+                    ? `Quedan ${waited(Math.max(0, -hoursSince(data.replyWindow.closesAt)))} de la ventana de 24 h · `
                     : ""}
-                  se envía al pulsar enviar · Ctrl+Enter
+                  Se envía al pulsar enviar · Ctrl+Enter
                 </span>
                 <button type="submit" className="btn btn--small" disabled={sending || !draft.trim()}>
-                  {sending ? <Busy words={["ENVIANDO"]} /> : "enviar"}
+                  {sending ? <Busy words={["ENVIANDO"]} /> : "Enviar"}
                 </button>
               </div>
             </form>
@@ -276,12 +276,12 @@ export function PostsCard({ days }: { days: PeriodDays }) {
   if (loading) {
     return (
       <p className="empty">
-        <Spinner /> cargando publicaciones
+        <Spinner /> Cargando publicaciones
       </p>
     );
   }
   if (error && !data) return <p className="alert alert--error">! {errorMessage(error)}</p>;
-  if (!data?.posts.length) return <p className="empty">no hay publicaciones en este periodo.</p>;
+  if (!data?.posts.length) return <p className="empty">No hay publicaciones en este periodo.</p>;
 
   const shown = data.posts
     .filter((post) => filter === "all" || post.platform === filter)
@@ -292,9 +292,9 @@ export function PostsCard({ days }: { days: PeriodDays }) {
     <div className="stack">
       <div className="cx__filters">
         <label className="field">
-          <span className="field__label">red</span>
+          <span className="field__label">Red</span>
           <select className="field__input" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">todas ({count(data.posts.length)})</option>
+            <option value="all">Todas ({count(data.posts.length)})</option>
             {data.networks.map((n) => (
               <option key={n.name} value={n.name}>
                 {network(n.name)} ({count(n.count)})
@@ -303,10 +303,10 @@ export function PostsCard({ days }: { days: PeriodDays }) {
           </select>
         </label>
         <label className="field">
-          <span className="field__label">ordenar por</span>
+          <span className="field__label">Ordenar por</span>
           <select className="field__input" value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
-            <option value="recent">más recientes</option>
-            <option value="engagement">más interacciones</option>
+            <option value="recent">Más recientes</option>
+            <option value="engagement">Más interacciones</option>
           </select>
         </label>
       </div>
@@ -326,7 +326,7 @@ export function PostsCard({ days }: { days: PeriodDays }) {
               </span>
               <span className="cx__post-numbers">
                 {unmeasured.has(post.platform) ? (
-                  <span className="cx__muted">sin métricas</span>
+                  <span className="cx__muted">Sin métricas</span>
                 ) : (
                   <>
                     <strong>{count(post.engagement)}</strong>
@@ -357,44 +357,44 @@ export function PostPanel({ post, measured, onClose }: { post: PostDetail; measu
         </div>
         <dl className="cx__figures">
           <div>
-            <dt>interacciones</dt>
+            <dt>Interacciones</dt>
             <dd>{measured ? count(post.engagement) : "—"}</dd>
           </div>
           <div>
-            <dt>likes</dt>
+            <dt>Likes</dt>
             <dd>{measured ? count(post.likes) : "—"}</dd>
           </div>
           <div>
-            <dt>comentarios</dt>
+            <dt>Comentarios</dt>
             <dd>{measured ? count(post.comments) : "—"}</dd>
           </div>
           <div>
-            <dt>compartidos</dt>
+            <dt>Compartidos</dt>
             <dd>{measured ? count(post.shares) : "—"}</dd>
           </div>
         </dl>
         {!measured && <p className="cx__note">{network(post.platform)} no reporta interacciones por publicación al CX; míralas en la propia red.</p>}
         <dl className="cx__facts">
-          <dt>perfil</dt>
+          <dt>Perfil</dt>
           <dd>{post.profiles.join(", ") || "—"}</dd>
-          <dt>formato</dt>
-          <dd>{post.format === "reel" ? "reel / video corto" : "publicación"}</dd>
-          <dt>estado</dt>
+          <dt>Formato</dt>
+          <dd>{post.format === "reel" ? "Reel / video corto" : "Publicación"}</dd>
+          <dt>Estado</dt>
           <dd>{post.status ?? "—"}</dd>
-          <dt>creada por</dt>
+          <dt>Creada por</dt>
           <dd>{post.createdBy ?? "—"}</dd>
           {post.tags.length > 0 && (
             <>
-              <dt>etiquetas</dt>
+              <dt>Etiquetas</dt>
               <dd>{post.tags.join(", ")}</dd>
             </>
           )}
         </dl>
-        <span className="cx__subtitle">texto</span>
-        <p className="cx__caption">{post.caption || "(sin texto)"}</p>
+        <span className="cx__subtitle">Texto</span>
+        <p className="cx__caption">{post.caption || "(Sin texto)"}</p>
         {post.link && (
           <a href={post.link} target="_blank" rel="noreferrer noopener" className="btn btn--small">
-            ver en {network(post.platform)} ↗
+            Ver en {network(post.platform)} ↗
           </a>
         )}
       </div>
@@ -404,56 +404,56 @@ export function PostPanel({ post, measured, onClose }: { post: PostDetail; measu
 
 // --- an ad ----------------------------------------------------------------------------
 
-const STATUS_LABELS: Record<string, string> = { open: "abierta", won: "ganada", lost: "perdida", abandoned: "abandonada" };
+const STATUS_LABELS: Record<string, string> = { open: "Abierta", won: "Ganada", lost: "Perdida", abandoned: "Abandonada" };
 
 export function AdPanel({ name, days, onClose }: { name: string; days: PeriodDays; onClose: () => void }) {
   const { data, error, loading } = useResource(`cx-ads:${days}`, () => getAds(days));
   const ad: AdDetail | undefined = data?.ads.find((a) => a.name === name);
 
   return (
-    <Panel title={name} subtitle={ad?.adId ? `anuncio ${ad.adId}` : undefined} onClose={onClose}>
+    <Panel title={name} subtitle={ad?.adId ? `Anuncio ${ad.adId}` : undefined} onClose={onClose}>
       {loading ? (
         <p className="empty">
-          <Spinner /> cargando los leads del anuncio
+          <Spinner /> Cargando los leads del anuncio
         </p>
       ) : error && !data ? (
         <p className="alert alert--error">! {errorMessage(error)}</p>
       ) : !ad ? (
-        <p className="empty">este anuncio no trajo leads en el periodo.</p>
+        <p className="empty">Este anuncio no trajo leads en el periodo.</p>
       ) : (
         <div className="stack">
           <dl className="cx__figures">
             <div>
-              <dt>leads</dt>
+              <dt>Leads</dt>
               <dd>{count(ad.leads)}</dd>
             </div>
             <div>
-              <dt>→ oportunidad</dt>
+              <dt>→ Oportunidad</dt>
               <dd>{share(ad.toOpportunity)}</dd>
             </div>
             <div>
-              <dt>ganados</dt>
+              <dt>Ganados</dt>
               <dd>{count(ad.won)}</dd>
             </div>
           </dl>
           {ad.landing && (
             <p className="cx__muted">
-              página de destino:{" "}
+              Página de destino:{" "}
               <a href={ad.landing} target="_blank" rel="noreferrer noopener" className="linkbtn">
                 {ad.landing.replace(/^https?:\/\//, "")} ↗
               </a>
             </p>
           )}
-          <span className="cx__subtitle">dónde están ahora</span>
+          <span className="cx__subtitle">Dónde están ahora</span>
           <RankedBars label="Leads del anuncio por etapa" rows={ad.byStage.map((s) => ({ name: s.name, value: s.count }))} detail={(row) => share(row.value / ad.leads)} />
-          <span className="cx__subtitle">leads, del más reciente</span>
+          <span className="cx__subtitle">Leads, del más reciente</span>
           <table className="cx__table">
             <thead>
               <tr>
-                <th scope="col">contacto</th>
-                <th scope="col">llegó</th>
-                <th scope="col">etapa</th>
-                <th scope="col">valor</th>
+                <th scope="col">Contacto</th>
+                <th scope="col">Llegó</th>
+                <th scope="col">Etapa</th>
+                <th scope="col">Valor</th>
               </tr>
             </thead>
             <tbody>
@@ -461,13 +461,13 @@ export function AdPanel({ name, days, onClose }: { name: string; days: PeriodDay
                 <tr key={lead.contactId}>
                   <th scope="row">{lead.name}</th>
                   <td>{new Date(lead.date).toLocaleDateString("es-MX", { day: "numeric", month: "short" })}</td>
-                  <td>{lead.stage ?? (lead.status ? STATUS_LABELS[lead.status] ?? lead.status : "sin oportunidad")}</td>
+                  <td>{lead.stage ?? (lead.status ? STATUS_LABELS[lead.status] ?? lead.status : "Sin oportunidad")}</td>
                   <td>{lead.value ? money(lead.value) : "—"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {ad.people.length < ad.leads && <p className="cx__note">se muestran los {count(ad.people.length)} más recientes.</p>}
+          {ad.people.length < ad.leads && <p className="cx__note">Se muestran los {count(ad.people.length)} más recientes.</p>}
         </div>
       )}
     </Panel>

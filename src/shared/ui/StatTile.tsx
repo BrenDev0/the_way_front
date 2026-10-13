@@ -14,7 +14,7 @@ export function StatTile({ label, value, detail, loading, failed }: StatTileProp
     <div className="stat">
       <div className="stat__label">{label}</div>
       <div className="stat__value">{loading ? <Spinner /> : failed ? <span className="stat__failed">--</span> : value}</div>
-      <div className="stat__detail">{failed ? "no disponible" : loading ? "cargando" : detail}</div>
+      <div className="stat__detail">{failed ? "No disponible" : loading ? "Cargando" : detail}</div>
     </div>
   );
 }

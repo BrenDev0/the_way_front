@@ -39,6 +39,8 @@ button, input, select { transition: border-color .16s, background-color .16s, bo
 .field { font-size: 12px; color: var(--muted); gap: 9px; }
 .field__row { padding: 11px 12px; background: #060c12; border: 1px solid var(--border-dim); border-radius: 4px; }
 .field__row:focus-within { border-color: var(--magenta); box-shadow: 0 0 0 3px rgba(255, 0, 255, 0.05); }
+/* the row above already shows focus; the global ring drew a second box inside it */
+.field__row .field__input:focus-visible { outline: none; }
 select.field__input, input[type="search"].field__input { min-height: 44px; padding: 10px 12px; background: #060c12; border: 1px solid var(--border-dim); border-radius: 4px; font-size: 13px; }
 select.field__input option { background: #0c1319; }
 .alert { border-radius: 4px; font-size: 12px; }
@@ -88,8 +90,9 @@ select.field__input option { background: #0c1319; }
 /* --- library: brands on the left, the chosen brand's files on the right --- */
 .library { display: grid; grid-template-columns: minmax(220px, 280px) minmax(0, 1fr); gap: 20px; align-items: start; }
 .library .dropzone { background: #0a141c; border-color: #385663; }
-.library__new { display: flex; gap: 8px; }
-.library__new .field__input { flex: 1; min-width: 0; }
+/* new brand: the shared field on its own line, the button full width under it, a rule before the list */
+.library__new { display: flex; flex-direction: column; gap: 10px; padding-bottom: 18px; border-bottom: 1px solid var(--border-dim); }
+.library__new .field__input { font-family: var(--font-mono); font-size: 14px; letter-spacing: .04em; }
 .library__brands { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .library__brand { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 9px 12px; border: 1px solid var(--border-dim); border-radius: 6px; background: var(--panel-sunk); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
 .library__brand:hover { border-color: var(--border); color: var(--text-bright); }
@@ -199,7 +202,7 @@ select.field__input option { background: #0c1319; }
 /* tabs: one row, scrolls sideways on a narrow screen rather than wrapping */
 .tabs { display: flex; flex-direction: column; gap: 20px; }
 .tabs__list { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--border-dim); scrollbar-width: thin; }
-.tabs__tab { display: inline-flex; flex: none; align-items: center; gap: 8px; padding: 10px 14px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font: inherit; font-family: var(--font-mono); font-size: 13px; text-transform: lowercase; cursor: pointer; }
+.tabs__tab { display: inline-flex; flex: none; align-items: center; gap: 8px; padding: 10px 14px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font: inherit; font-family: var(--font-mono); font-size: 13px; cursor: pointer; }
 .tabs__tab:hover { color: var(--text-bright); }
 .tabs__tab:focus-visible { outline: 1px solid var(--accent); outline-offset: -1px; }
 .tabs__tab--selected { border-bottom-color: var(--accent); color: var(--text-bright); }
@@ -316,9 +319,13 @@ select.field__input option { background: #0c1319; }
 .skill-editor__meta { display: grid; grid-template-columns: minmax(0, .6fr) minmax(0, 1.4fr); gap: 16px; font-size: 12px; color: var(--text); }
 .skill-editor__meta > span { display: flex; flex-direction: column; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
 .skill-editor__meta strong { color: var(--accent); font-weight: 500; }
+.skill-editor__meta > .skill-editor__triggers { grid-column: 1 / -1; }
 .skill-editor__input { min-height: 360px; font-family: inherit; tab-size: 2; }
 .skills-page .dropzone { background: #0a141c; border-color: #385663; }
 .skill-library .rail__title { font-size: 13px; }
+.skill-library .rail__item { grid-template-areas: "glyph title status" ". meta meta" ". files files"; }
+.skill-library__files { grid-area: files; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 2px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.skill-library__files-count { color: var(--accent); }
 @media (max-width: 1150px) { .skills-workspace { grid-template-columns: 1fr; } }
 @media (max-width: 600px) {
   .skill-chat__log { height: 360px; }
@@ -376,3 +383,17 @@ h1, h2, h3, .welcome__kicker, .sidebar__org, .term__title, .term__status, .conso
   .members-list__identity { flex-basis: calc(100% - 84px); }
   .members-list__status { margin-left: 84px; } /* under the email: index 22 + gap 14 + avatar 34 + gap 14 */
 }
+
+/* the public download page: the sign-in's shell, two installer boxes side by side */
+.download { display: flex; flex-direction: column; align-items: center; gap: 28px; width: 100%; max-width: 920px; }
+.download__intro { max-width: 620px; text-align: center; }
+.download__title { margin: 0 0 10px; color: var(--text-bright); font-size: clamp(24px, 3vw, 32px); letter-spacing: -.03em; text-shadow: none; }
+.download__lead { margin: 0; color: var(--text); font-family: var(--font-sans); font-size: 15px; line-height: 1.6; }
+.download__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; width: 100%; align-items: start; }
+.download__grid .term { max-width: none; }
+.download__badge { margin: 0; color: var(--accent); font-size: 12px; letter-spacing: .08em; }
+.download__heading { margin: 4px 0 8px; color: var(--muted); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; }
+.download__steps { margin: 0; padding-left: 20px; color: var(--text); font-family: var(--font-sans); font-size: 13px; line-height: 1.6; }
+.download__steps li + li { margin-top: 6px; }
+@media (max-width: 760px) { .download__grid { grid-template-columns: 1fr; } }
+.download__code { display: block; margin: 6px 0; padding: 6px 10px; border: 1px solid var(--border-dim); border-radius: 4px; background: var(--panel-sunk); color: var(--accent); font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; user-select: all; }

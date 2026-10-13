@@ -37,10 +37,10 @@ export function InviteForm() {
   }
 
   return (
-    <TerminalBox wide title="INVITAR OPERADOR" status="la invitación expira en 7 días">
+    <TerminalBox wide title="INVITAR OPERADOR" status="La invitación expira en 7 días">
       <form className="stack" onSubmit={onSubmit} noValidate>
         <Field
-          label="correo"
+          label="Correo"
           type="email"
           autoComplete="off"
           placeholder="nuevo@dominio.io"
@@ -50,14 +50,14 @@ export function InviteForm() {
         />
         {roles.length > 1 ? (
           <Segmented
-            label="rol"
+            label="Rol"
             value={role}
             options={roles.map((r) => ({ value: r, label: ROLE_LABELS[r] }))}
             onChange={setRole}
             disabled={busy}
           />
         ) : (
-          <p className="field__hint">se unirá como {ROLE_LABELS.member}</p>
+          <p className="field__hint">Se unirá como {ROLE_LABELS.member.toLowerCase()}</p>
         )}
         {error && (
           <p className="alert alert--error" role="alert">

@@ -89,7 +89,7 @@ export function RankedBars({
   label,
   format = (value) => value.toLocaleString("es-MX"),
   detail,
-  empty = "sin datos en este periodo",
+  empty = "Sin datos en este periodo",
 }: {
   rows: { name: string; value: number; key?: string }[];
   label: string;

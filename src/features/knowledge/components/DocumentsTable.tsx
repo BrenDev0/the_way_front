@@ -70,7 +70,7 @@ export function DocumentsTable() {
           <span className="toolbar__info">
             {undescribed > 0
               ? `${undescribed} ${undescribed === 1 ? "documento" : "documentos"} sin descripción — ya están disponibles; una descripción ayuda al agente a elegir cuál leer`
-              : "todas las fuentes tienen descripción"}
+              : "Todas las fuentes tienen descripción"}
           </span>
           <button className="btn btn--small toolbar__action" type="button" onClick={describe} disabled={training || undescribed === 0}>
             {training ? <Busy words={["DESCRIBIENDO"]} /> : "Generar descripciones"}
@@ -85,12 +85,12 @@ export function DocumentsTable() {
 
         {loading ? (
           <p className="empty">
-            <Spinner /> cargando documentos
+            <Spinner /> Cargando documentos
           </p>
         ) : error && !data ? (
           <p className="alert alert--error">! {errorMessage(error)}</p>
         ) : documents.length === 0 ? (
-          <p className="empty">todavía no hay fuentes compartidas. añade un documento sobre tu organización.</p>
+          <p className="empty">Todavía no hay fuentes compartidas. Añade un documento sobre tu organización.</p>
         ) : (
           <ul className="doclist">
             {documents.map((doc) =>
@@ -124,10 +124,10 @@ export function DocumentsTable() {
                   </span>
                   <span className="doclist__actions">
                     <button type="button" className="linkbtn" onClick={() => setEditing(doc.id)}>
-                      editar
+                      Editar
                     </button>
-                    <ConfirmButton question="¿eliminar?" onConfirm={() => remove(doc.id, doc.title)}>
-                      eliminar
+                    <ConfirmButton question="¿Eliminar?" onConfirm={() => remove(doc.id, doc.title)}>
+                      Eliminar
                     </ConfirmButton>
                   </span>
                 </li>
@@ -177,13 +177,13 @@ function DocumentEditor({
   return (
     <form className="doc-editor" onSubmit={save} aria-label={`Editar ${document.title}`}>
       <label className="field">
-        <span className="field__label">título</span>
+        <span className="field__label">Título</span>
         <input className="field__input" value={title} minLength={2} maxLength={255} required onChange={(e) => setTitle(e.target.value)} />
       </label>
       <label className="field">
-        <span className="field__label">marca</span>
+        <span className="field__label">Marca</span>
         <select className="field__input" value={brand} onChange={(e) => setBrand(e.target.value)}>
-          <option value={NO_BRAND}>— la organización (ninguna marca)</option>
+          <option value={NO_BRAND}>— La organización (ninguna marca)</option>
           {options.map((name) => (
             <option key={name} value={name}>
               {name}
@@ -192,15 +192,15 @@ function DocumentEditor({
         </select>
       </label>
       <label className="field doc-editor__wide">
-        <span className="field__label">descripción — qué contiene y cuándo leerlo</span>
+        <span className="field__label">Descripción — qué contiene y cuándo leerlo</span>
         <textarea className="field__input" value={description} rows={3} maxLength={1024} onChange={(e) => setDescription(e.target.value)} />
       </label>
       <div className="doc-editor__actions">
         <button type="button" className="linkbtn" onClick={onCancel}>
-          cancelar
+          Cancelar
         </button>
         <button type="submit" className="btn btn--small" disabled={saving || title.trim().length < 2}>
-          {saving ? <Busy words={["GUARDANDO"]} /> : "guardar"}
+          {saving ? <Busy words={["GUARDANDO"]} /> : "Guardar"}
         </button>
       </div>
     </form>

@@ -49,7 +49,7 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
 
   return (
     <AuthShell>
-      <TerminalBox title={<Scramble text={acceptedEmail ? "INVITACIÓN :: ACTIVADA" : "INVITACIÓN :: ACEPTAR"} />} status={acceptedEmail ? "cuenta creada" : token ? "define tu contraseña" : "enlace inválido"}>
+      <TerminalBox title={<Scramble text={acceptedEmail ? "INVITACIÓN :: ACTIVADA" : "INVITACIÓN :: ACEPTAR"} />} status={acceptedEmail ? "Cuenta creada" : token ? "Define tu contraseña" : "Enlace inválido"}>
         {acceptedEmail ? (
           <div className="stack">
             <p className="alert alert--ok" role="status">✓ Tu cuenta para {acceptedEmail} está lista.</p>
@@ -59,24 +59,24 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
         ) : token ? (
           <form className="stack" onSubmit={onSubmit} noValidate>
             <div className="steps" aria-hidden="true">
-              <span className="steps__item--active">[01] activar cuenta</span>
+              <span className="steps__item--active">[01] Activar cuenta</span>
               <span className="steps__line" />
-              <span>[02] entrar al equipo</span>
+              <span>[02] Entrar al equipo</span>
             </div>
             <p className="field__hint">Te invitaron a unirte a una organización en THE WAY. Crea tu contraseña para acceder al espacio compartido del equipo.</p>
             <Field
-              label="contraseña"
+              label="Contraseña"
               revealable
               autoComplete="new-password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              hint={`mínimo ${MIN_PASSWORD} caracteres`}
+              hint={`Mínimo ${MIN_PASSWORD} caracteres`}
               autoFocus
               required
             />
             <Field
-              label="confirmar contraseña"
+              label="Confirmar contraseña"
               revealable
               autoComplete="new-password"
               placeholder="••••••••"
@@ -100,7 +100,7 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
         )}
         {!acceptedEmail && (
           <p className="switch">
-            ¿ya tienes cuenta? <Link href="/login">inicia sesión ❯</Link>
+            ¿Ya tienes cuenta? <Link href="/login">Inicia sesión ❯</Link>
           </p>
         )}
       </TerminalBox>

@@ -56,13 +56,13 @@ function ProgressBar({ ratio }: { ratio: number }) {
 function stateLabel(item: UploadItem) {
   switch (item.state) {
     case "queued":
-      return "en cola";
+      return "En cola";
     case "uploading":
       return `${Math.round(item.progress * 100)}%`;
     case "processing":
-      return "registrando";
+      return "Registrando";
     case "done":
-      return "✓ subido";
+      return "✓ Subido";
     case "error":
       return item.message ?? UPLOAD_FAILED;
   }
@@ -138,7 +138,7 @@ export function DocumentUploader() {
   const active = items.some((i) => i.state === "queued" || i.state === "uploading" || i.state === "processing");
 
   return (
-    <TerminalBox wide title="AÑADIR FUENTES" status={active ? "transmitiendo" : "máx 64 MB por archivo"}>
+    <TerminalBox wide title="AÑADIR FUENTES" status={active ? "Transmitiendo" : "Máx 64 MB por archivo"}>
       <div className="stack">
         <div
           className={dragging ? "dropzone dropzone--active" : "dropzone"}
@@ -157,7 +157,7 @@ export function DocumentUploader() {
           <span className="dropzone__glyph" aria-hidden="true">
             ⇪
           </span>
-          <span className="dropzone__title">{dragging ? "suelta para compartir" : "arrastra fuentes de tu organización aquí o haz clic"}</span>
+          <span className="dropzone__title">{dragging ? "Suelta para compartir" : "Arrastra fuentes de tu organización aquí o haz clic"}</span>
           <span className="dropzone__hint">pdf · docx · txt · md · csv · json · html · código</span>
           <input
             ref={inputRef}
@@ -194,7 +194,7 @@ export function DocumentUploader() {
                   className="linkbtn"
                   onClick={() => setItems((list) => list.filter((i) => i.state !== "done" && i.state !== "error"))}
                 >
-                  limpiar lista
+                  Limpiar lista
                 </button>
               </div>
             )}

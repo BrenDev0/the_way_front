@@ -58,7 +58,7 @@ export function MembersList() {
         <div className="members-card__toolbar">
           <h3>Directorio <span>{data ? `(${seatsUsed})` : ""}</span></h3>
           <button className="members-card__refresh" type="button" onClick={refresh} disabled={loading || refreshing}>
-            <span aria-hidden="true">↻</span> {refreshing ? "actualizando..." : "actualizar lista"}
+            <span aria-hidden="true">↻</span> {refreshing ? "Actualizando..." : "Actualizar lista"}
           </button>
         </div>
         {error ? <p className="alert alert--error" role="alert">! {errorMessage(error)}</p> : null}
@@ -67,9 +67,9 @@ export function MembersList() {
           <label className="field">Configuración<select className="field__input" value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">Todo el equipo</option><option value="ready">Listos para IA</option><option value="pending">Necesitan configuración</option></select></label>
         </div>
         {loading ? (
-          <p className="empty members-card__empty"><Spinner /> cargando operadores</p>
+          <p className="empty members-card__empty"><Spinner /> Cargando operadores</p>
         ) : !data?.length ? (
-          <p className="empty members-card__empty">no hay operadores activos</p>
+          <p className="empty members-card__empty">No hay operadores activos</p>
         ) : (
           <ul className="members-list">
             {!filtered?.length && <li className="empty">No hay operadores que coincidan con los filtros.</li>}
@@ -84,7 +84,7 @@ export function MembersList() {
                     <span className="members-list__email" title={member.email}>{member.email}</span>
                     {member.id === currentUser.id && <span className="members-list__you">TÚ</span>}
                   </span>
-                  <span className="members-list__joined">se unió {formatRelative(member.createdAt)}</span>
+                  <span className="members-list__joined">Se unió {formatRelative(member.createdAt)}</span>
                 </span>
                 <span className="members-list__status">
                   <span className={`console-badge ${member.setupComplete ? "console-badge--ready" : "console-badge--pending"}`}>{member.setupComplete ? "Listo para usar IA" : "Necesita configuración"}</span>

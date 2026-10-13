@@ -20,10 +20,10 @@ const EXTENSIONS = ["md", "markdown"];
 const MAX_BYTES = 256 * 1024;
 
 const LABELS: Record<Exclude<UploadState, "error">, string> = {
-  queued: "en cola",
-  saving: "guardando",
-  created: "✓ creada",
-  replaced: "✓ reemplazada",
+  queued: "En cola",
+  saving: "Guardando",
+  created: "✓ Creada",
+  replaced: "✓ Reemplazada",
 };
 
 interface SkillUploaderProps {
@@ -99,7 +99,7 @@ export function SkillUploader({ skills, dirty, onOpen }: SkillUploaderProps) {
   const active = items.some((item) => item.state === "queued" || item.state === "saving");
 
   return (
-    <TerminalBox wide title="SUBIR ARCHIVOS .MD" status={active ? "guardando" : "máx 256 KB por archivo"}>
+    <TerminalBox wide title="SUBIR ARCHIVOS .MD" status={active ? "Guardando" : "Máx 256 KB por archivo"}>
       <div className="stack">
         <div
           className={dragging ? "dropzone dropzone--active" : "dropzone"}
@@ -116,8 +116,8 @@ export function SkillUploader({ skills, dirty, onOpen }: SkillUploaderProps) {
           onDrop={onDrop}
         >
           <span className="dropzone__glyph" aria-hidden="true">⇪</span>
-          <span className="dropzone__title">{dragging ? "suelta para guardar" : "arrastra archivos SKILL.md aquí o haz clic"}</span>
-          <span className="dropzone__hint">el nombre y la descripción se leen del encabezado · un archivo con el mismo nombre reemplaza la skill</span>
+          <span className="dropzone__title">{dragging ? "Suelta para guardar" : "Arrastra archivos SKILL.md aquí o haz clic"}</span>
+          <span className="dropzone__hint">El nombre y la descripción se leen del encabezado · un archivo con el mismo nombre reemplaza la skill</span>
           <input
             ref={inputRef}
             type="file"
@@ -144,11 +144,11 @@ export function SkillUploader({ skills, dirty, onOpen }: SkillUploaderProps) {
                   {item.state === "error" && item.content !== undefined &&
                     (dirty ? (
                       <ConfirmButton question="¿Descartar el borrador?" onConfirm={() => onOpen(item.content!)}>
-                        corregir en el editor
+                        Corregir en el editor
                       </ConfirmButton>
                     ) : (
                       <button type="button" className="linkbtn" onClick={() => onOpen(item.content!)}>
-                        corregir en el editor
+                        Corregir en el editor
                       </button>
                     ))}
                 </li>
@@ -158,7 +158,7 @@ export function SkillUploader({ skills, dirty, onOpen }: SkillUploaderProps) {
               <div className="row-between">
                 <span>{items.length} archivos procesados</span>
                 <button type="button" className="linkbtn" onClick={() => setItems([])}>
-                  limpiar lista
+                  Limpiar lista
                 </button>
               </div>
             )}

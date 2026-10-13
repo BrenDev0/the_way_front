@@ -45,13 +45,13 @@ function InvitationRow({ invitation, onFeedback }: { invitation: Invitation; onF
       <span className="rail__title">{invitation.email}</span>
       <span className="status status--pending">{ROLE_LABELS[invitation.role]}</span>
       <span className="rail__meta rail__meta--actions">
-        <span>expira {formatRelative(invitation.expiresAt)}</span>
+        <span>Expira {formatRelative(invitation.expiresAt)}</span>
         <span className="rail__actions">
           <button type="button" className="linkbtn" onClick={resend} disabled={resending}>
-            {resending ? "reenviando..." : "reenviar"}
+            {resending ? "Reenviando..." : "Reenviar"}
           </button>
-          <ConfirmButton question="¿revocar?" onConfirm={revoke} disabled={resending}>
-            revocar
+          <ConfirmButton question="¿Revocar?" onConfirm={revoke} disabled={resending}>
+            Revocar
           </ConfirmButton>
         </span>
       </span>
@@ -73,12 +73,12 @@ export function PendingInvitations() {
         )}
         {loading ? (
           <p className="empty">
-            <Spinner /> cargando invitaciones
+            <Spinner /> Cargando invitaciones
           </p>
         ) : error && !data ? (
           <p className="alert alert--error">! {errorMessage(error)}</p>
         ) : !data?.length ? (
-          <p className="empty">no hay invitaciones pendientes</p>
+          <p className="empty">No hay invitaciones pendientes</p>
         ) : (
           <ul className="rail">
             {data.map((invitation) => (

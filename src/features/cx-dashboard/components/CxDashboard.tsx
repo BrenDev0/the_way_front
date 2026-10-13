@@ -32,13 +32,13 @@ const PERIOD_LABELS: Record<PeriodDays, string> = { "7": "7 días", "30": "30 d�
 const TAB_IDS = ["resumen", "ventas", "conversaciones", "marketing", "redes", "equipo", "clientes"] as const;
 type Tab = (typeof TAB_IDS)[number];
 const TAB_LABELS: Record<Tab, string> = {
-  resumen: "resumen",
-  ventas: "ventas",
-  conversaciones: "conversaciones",
-  marketing: "marketing",
-  redes: "redes sociales",
-  equipo: "equipo",
-  clientes: "clientes",
+  resumen: "Resumen",
+  ventas: "Ventas",
+  conversaciones: "Conversaciones",
+  marketing: "Marketing",
+  redes: "Redes sociales",
+  equipo: "Equipo",
+  clientes: "Clientes",
 };
 
 /**
@@ -70,11 +70,11 @@ export function CxDashboard() {
 
   const controls = (
     <div className="cx__controls">
-      <Segmented label="periodo" value={days} options={PERIODS.map((value) => ({ value, label: PERIOD_LABELS[value] }))} onChange={setDays} disabled={refreshing} />
+      <Segmented label="Periodo" value={days} options={PERIODS.map((value) => ({ value, label: PERIOD_LABELS[value] }))} onChange={setDays} disabled={refreshing} />
       <div className="cx__freshness">
-        {data && "generatedAt" in data && <span>actualizado {formatRelative(data.generatedAt)}</span>}
+        {data && "generatedAt" in data && <span>Actualizado {formatRelative(data.generatedAt)}</span>}
         <button type="button" className="btn btn--small" onClick={refresh} disabled={refreshing || loading}>
-          {refreshing ? <Busy words={["LEYENDO EL CX"]} /> : "actualizar"}
+          {refreshing ? <Busy words={["LEYENDO EL CX"]} /> : "Actualizar"}
         </button>
       </div>
     </div>
@@ -85,7 +85,7 @@ export function CxDashboard() {
       <div className="cx">
         {controls}
         <p className="empty">
-          <Spinner /> leyendo tu cuenta del CX — tarda unos segundos
+          <Spinner /> Leyendo tu cuenta del CX — tarda unos segundos
         </p>
       </div>
     );
@@ -103,7 +103,7 @@ export function CxDashboard() {
       <TerminalBox wide title="EL CX NO ESTÁ CONECTADO">
         <p>
           Mi CX lee tu cuenta del CX con tu propia llave. Agrégala con su ID de ubicación en{" "}
-          <Link href="/api-keys">llaves api</Link> y vuelve aquí.
+          <Link href="/api-keys">Llaves API</Link> y vuelve aquí.
         </p>
       </TerminalBox>
     );
@@ -113,7 +113,7 @@ export function CxDashboard() {
       <div className="cx">
         {controls}
         <p className="alert alert--error" role="alert">
-          ! El CX rechazó tu llave: puede estar revocada o ser de otra cuenta. Reemplázala en <Link href="/api-keys">llaves api</Link>.
+          ! El CX rechazó tu llave: puede estar revocada o ser de otra cuenta. Reemplázala en <Link href="/api-keys">Llaves API</Link>.
         </p>
       </div>
     );
@@ -131,7 +131,7 @@ export function CxDashboard() {
   return (
     <div className={refreshing ? "cx cx--refreshing" : "cx"} aria-busy={refreshing}>
       {controls}
-      <Tabs label="Secciones de mi cx" tabs={TAB_IDS.map((id) => ({ id, label: TAB_LABELS[id], badge: badge[id] }))} value={tab} onChange={setTab}>
+      <Tabs label="Secciones de mi CX" tabs={TAB_IDS.map((id) => ({ id, label: TAB_LABELS[id], badge: badge[id] }))} value={tab} onChange={setTab}>
         {tab === "resumen" && (
           <div className="stack">
             <Headline dashboard={dashboard} />
@@ -259,36 +259,36 @@ function Headline({ dashboard }: { dashboard: Dashboard }) {
   return (
     <div className="stats cx__stats">
       <StatTile
-        label="leads nuevos"
+        label="Leads nuevos"
         value={isReady(leads) ? count(leads.total) : "--"}
-        detail={isReady(leads) ? (change(leads.change) ? `${change(leads.change)} vs ${days} días anteriores` : `antes: ${count(leads.previous)}`) : locked(leads)}
+        detail={isReady(leads) ? (change(leads.change) ? `${change(leads.change)} vs ${days} días anteriores` : `Antes: ${count(leads.previous)}`) : locked(leads)}
       />
       <StatTile
-        label="esperando respuesta"
+        label="Esperando respuesta"
         value={isReady(inbox) ? count(inbox.recent) : "--"}
-        detail={isReady(inbox) ? `de la última semana · ${count(inbox.waiting)} en total` : locked(inbox)}
+        detail={isReady(inbox) ? `De la última semana · ${count(inbox.waiting)} en total` : locked(inbox)}
       />
       <StatTile
-        label="pipeline abierto"
+        label="Pipeline abierto"
         value={isReady(pipeline) ? money(pipeline.openValue) : "--"}
         detail={isReady(pipeline) ? `${count(pipeline.open)} oportunidades${pipeline.valueWarning ? " · revisa montos" : ""}` : locked(pipeline)}
       />
       <StatTile
-        label="ganado"
+        label="Ganado"
         value={isReady(sales) ? money(sales.wonValue) : "--"}
         detail={isReady(sales) ? `${count(sales.won)} cerradas · tasa ${share(sales.winRate)}` : locked(sales)}
       />
       <StatTile
-        label="citas próximos 7 días"
+        label="Citas próximos 7 días"
         value={isReady(appointments) ? count(appointments.upcoming) : "--"}
-        detail={isReady(appointments) ? `asistencia ${share(appointments.showRate)}` : locked(appointments)}
+        detail={isReady(appointments) ? `Asistencia ${share(appointments.showRate)}` : locked(appointments)}
       />
     </div>
   );
 }
 
 function locked(section: Section<unknown>) {
-  return section.status === "missing_scope" ? "falta permiso" : "no disponible";
+  return section.status === "missing_scope" ? "Falta permiso" : "No disponible";
 }
 
 function Card<T>({ title, section, wide, children }: { title: string; section: Section<T> | undefined; wide?: boolean; children: (data: T) => ReactNode }) {
@@ -296,12 +296,12 @@ function Card<T>({ title, section, wide, children }: { title: string; section: S
   if (!section) {
     return (
       <TerminalBox wide={wide} title={title}>
-        <p className="empty">pulsa actualizar para ver esta sección.</p>
+        <p className="empty">Pulsa actualizar para ver esta sección.</p>
       </TerminalBox>
     );
   }
   return (
-    <TerminalBox wide={wide} title={title} status={section.status === "partial" ? "parcial" : undefined}>
+    <TerminalBox wide={wide} title={title} status={section.status === "partial" ? "Parcial" : undefined}>
       {section.status === "missing_scope" ? (
         <div className="cx__locked">
           <p>
@@ -342,12 +342,12 @@ function InboxCard({ inbox }: { inbox: Inbox }) {
         </p>
         <RankedBars label="Cuánto llevan esperando" rows={inbox.buckets.map((b) => ({ name: b.label, value: b.count }))} />
         <RankedBars label="Por canal" rows={inbox.byChannel.map((c) => ({ name: c.name, value: c.count }))} />
-        <Partial show={inbox.truncated}>se muestran las {count(inbox.waiting)} más recientes.</Partial>
+        <Partial show={inbox.truncated}>Se muestran las {count(inbox.waiting)} más recientes.</Partial>
       </div>
       <div className="stack">
-        <span className="cx__subtitle">contestar primero — las más recientes, aún se pueden salvar</span>
+        <span className="cx__subtitle">Contestar primero — las más recientes, aún se pueden salvar</span>
         {inbox.toAnswer.length === 0 ? (
-          <p className="empty">nadie está esperando respuesta. ✓</p>
+          <p className="empty">Nadie está esperando respuesta. ✓</p>
         ) : (
           <ul className="cx__list">
             {inbox.toAnswer.map((c) => (
@@ -355,7 +355,7 @@ function InboxCard({ inbox }: { inbox: Inbox }) {
                 <button type="button" className="cx__listrow" onClick={() => setOpen({ id: c.conversationId, name: c.name })} aria-label={`Abrir la conversación con ${c.name}`}>
                   <span className="cx__list-main">
                     <strong>{c.name}</strong>
-                    <span className="cx__muted">{c.preview || "(sin texto)"}</span>
+                    <span className="cx__muted">{c.preview || "(Sin texto)"}</span>
                   </span>
                   <span className="cx__list-side">
                     <span className={c.waitingHours >= 24 ? "cx__wait cx__wait--late" : "cx__wait"}>
@@ -386,7 +386,7 @@ function LeadsCard({ leads, days }: { leads: Leads; days: number }) {
         {change(leads.change) && <> · {change(leads.change)} vs el periodo anterior ({count(leads.previous)})</>}
       </p>
       <ColumnChart label="Leads nuevos por día" data={leads.byDay.map((d) => ({ key: d.date, value: d.count }))} dateLabel={day} />
-      <Partial show={leads.truncated}>cuenta parcial: el periodo tiene más contactos de los que se leen de una vez.</Partial>
+      <Partial show={leads.truncated}>Cuenta parcial: el periodo tiene más contactos de los que se leen de una vez.</Partial>
     </div>
   );
 }
@@ -394,10 +394,10 @@ function LeadsCard({ leads, days }: { leads: Leads; days: number }) {
 function SourcesCard({ leads }: { leads: Leads }) {
   return (
     <div className="stack">
-      <span className="cx__subtitle">por canal</span>
+      <span className="cx__subtitle">Por canal</span>
       <RankedBars label="Leads por canal" rows={leads.byChannel.map((c) => ({ name: c.name, value: c.count }))} />
-      <span className="cx__subtitle">por anuncio</span>
-      <RankedBars label="Leads por anuncio" rows={leads.byAd.map((c) => ({ name: c.name, value: c.count }))} empty="ningún lead del periodo trae el anuncio que lo trajo" />
+      <span className="cx__subtitle">Por anuncio</span>
+      <RankedBars label="Leads por anuncio" rows={leads.byAd.map((c) => ({ name: c.name, value: c.count }))} empty="Ningún lead del periodo trae el anuncio que lo trajo" />
     </div>
   );
 }
@@ -425,14 +425,14 @@ function PipelineCard({ pipeline }: { pipeline: Pipeline }) {
                 const stage = p.stages.find((s) => s.name === row.name);
                 return stage?.value ? money(stage.value) : null;
               }}
-              empty="sin oportunidades abiertas"
+              empty="Sin oportunidades abiertas"
             />
           </div>
         ))}
       </div>
       <div className="stack">
         <span className="cx__subtitle">
-          estancadas: {count(pipeline.stale)} de {count(pipeline.open)} abiertas no cambian de etapa hace {pipeline.staleDays}+ días
+          Estancadas: {count(pipeline.stale)} de {count(pipeline.open)} abiertas no cambian de etapa hace {pipeline.staleDays}+ días
         </span>
         {pipeline.stale > 0 && pipeline.stale >= pipeline.open * 0.8 && (
           <p className="cx__note">
@@ -446,7 +446,7 @@ function PipelineCard({ pipeline }: { pipeline: Pipeline }) {
                 <span className="cx__list-main">
                   <strong>{d.name}</strong>
                   <span className="cx__muted">
-                    {d.stage ?? "etapa desconocida"}
+                    {d.stage ?? "Etapa desconocida"}
                     {d.value ? ` · ${money(d.value)}` : ""}
                   </span>
                 </span>
@@ -465,30 +465,30 @@ function SalesCard({ sales }: { sales: Sales }) {
     <div className="stack">
       <dl className="cx__figures">
         <div>
-          <dt>nuevas</dt>
+          <dt>Nuevas</dt>
           <dd>{count(sales.created)}</dd>
         </div>
         <div>
-          <dt>ganadas</dt>
+          <dt>Ganadas</dt>
           <dd>{count(sales.won)}</dd>
         </div>
         <div>
-          <dt>perdidas</dt>
+          <dt>Perdidas</dt>
           <dd>{count(sales.lost)}</dd>
         </div>
         <div>
-          <dt>tasa de cierre</dt>
+          <dt>Tasa de cierre</dt>
           <dd>{share(sales.winRate)}</dd>
         </div>
         <div>
-          <dt>ticket promedio</dt>
+          <dt>Ticket promedio</dt>
           <dd>{sales.averageWon === null ? "—" : money(sales.averageWon)}</dd>
         </div>
       </dl>
       {sales.won + sales.lost === 0 && (
         <p className="cx__note">Ninguna oportunidad se marcó ganada o perdida en el periodo: sin eso no hay tasa de cierre ni ventas que medir.</p>
       )}
-      <span className="cx__subtitle">nuevas oportunidades por fuente</span>
+      <span className="cx__subtitle">Nuevas oportunidades por fuente</span>
       <RankedBars
         label="Oportunidades nuevas por fuente"
         rows={sales.bySource.map((s) => ({ name: s.name, value: s.count }))}
@@ -502,31 +502,31 @@ function SalesCard({ sales }: { sales: Sales }) {
 }
 
 function AppointmentsCard({ appointments }: { appointments: Appointments }) {
-  if (appointments.calendars === 0) return <p className="empty">la cuenta no tiene calendarios.</p>;
+  if (appointments.calendars === 0) return <p className="empty">La cuenta no tiene calendarios.</p>;
   return (
     <div className="stack">
       <dl className="cx__figures">
         <div>
-          <dt>en el periodo</dt>
+          <dt>En el periodo</dt>
           <dd>{count(appointments.total)}</dd>
         </div>
         <div>
-          <dt>asistieron</dt>
+          <dt>Asistieron</dt>
           <dd>{count(appointments.showed)}</dd>
         </div>
         <div>
-          <dt>no llegaron</dt>
+          <dt>No llegaron</dt>
           <dd>{count(appointments.noShow)}</dd>
         </div>
         <div>
-          <dt>canceladas</dt>
+          <dt>Canceladas</dt>
           <dd>{count(appointments.cancelled)}</dd>
         </div>
       </dl>
       {appointments.pending > 0 && <p className="cx__note">{count(appointments.pending)} citas pasadas siguen sin marcar si el cliente llegó.</p>}
-      <span className="cx__subtitle">próximos 7 días</span>
+      <span className="cx__subtitle">Próximos 7 días</span>
       {appointments.upcomingList.length === 0 ? (
-        <p className="empty">sin citas agendadas.</p>
+        <p className="empty">Sin citas agendadas.</p>
       ) : (
         <ul className="cx__list">
           {appointments.upcomingList.map((a) => (
@@ -553,14 +553,14 @@ function TeamCard({ team }: { team: Team }) {
         </p>
       )}
       {team.members.length === 0 ? (
-        <p className="empty">nadie tiene oportunidades ni conversaciones asignadas.</p>
+        <p className="empty">Nadie tiene oportunidades ni conversaciones asignadas.</p>
       ) : (
         <table className="cx__table">
           <thead>
             <tr>
-              <th scope="col">persona</th>
-              <th scope="col">oportunidades abiertas</th>
-              <th scope="col">sin contestar</th>
+              <th scope="col">Persona</th>
+              <th scope="col">Oportunidades abiertas</th>
+              <th scope="col">Sin contestar</th>
             </tr>
           </thead>
           <tbody>
@@ -591,7 +591,7 @@ function PaymentsCard({ payments }: { payments: Payments }) {
         dateLabel={day}
         format={(value) => money(value, payments.currency)}
       />
-      <Partial show={payments.truncated}>total parcial: hay más pagos de los que se leen de una vez.</Partial>
+      <Partial show={payments.truncated}>Total parcial: hay más pagos de los que se leen de una vez.</Partial>
     </div>
   );
 }

@@ -9,8 +9,8 @@ export default function MembersPage() {
       <div className="dash">
         <PageHeader
           kicker="ORGANIZACIÓN :: OPERADORES"
-          title="operadores"
-          description="consulta quién tiene acceso e invita nuevos operadores a tu organización."
+          title="Operadores"
+          description="Consulta quién tiene acceso e invita nuevos operadores a tu organización."
         />
         <MembersList />
         <div className="dash__panels">

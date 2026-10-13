@@ -6,7 +6,7 @@ export default async function ApiKeysPage({ searchParams }: { searchParams: Prom
   const { userId } = await searchParams;
   return <RequireRole roles={ADMIN_ROLES} fallback={<AccessDenied />}>
     <div className="dash">
-      <PageHeader kicker="ORGANIZACIÓN :: ACCESO" title="llaves api" description="Configura los proveedores que necesita cada persona del equipo." />
+      <PageHeader kicker="ORGANIZACIÓN :: ACCESO" title="Llaves API" description="Configura los proveedores que necesita cada persona del equipo." />
       <ApiKeysManager initialUserId={typeof userId === "string" ? userId : undefined} />
     </div>
   </RequireRole>;

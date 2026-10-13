@@ -143,7 +143,7 @@ describe("API key management", () => {
     render(<ApiKeysManager initialUserId={member.id} />);
     await user.click(await screen.findByRole("button", { name: "Revocar" }));
     expect(fetchMock.mock.calls.some(([, init]) => init?.method === "DELETE")).toBe(false);
-    await user.click(screen.getByRole("button", { name: "[sí]" }));
+    await user.click(screen.getByRole("button", { name: "[Sí]" }));
     await screen.findByText("Necesita una llave de IA");
     expect(screen.getByText("No hay llaves asignadas.")).toBeInTheDocument();
   });

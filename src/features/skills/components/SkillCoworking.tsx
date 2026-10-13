@@ -169,7 +169,7 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
   const busy = sending || waiting;
 
   return (
-    <TerminalBox wide title="01 / COWORKING CON EL AGENTE" status={waiting ? "el agente está escribiendo" : conversation ? "sesión activa" : "sin sesión"}>
+    <TerminalBox wide title="01 / COWORKING CON EL AGENTE" status={waiting ? "El agente está escribiendo" : conversation ? "Sesión activa" : "Sin sesión"}>
       <div className="skill-chat">
         <div className="skill-chat__log" ref={log} aria-live="polite">
           {!lines.length && !pending && (
@@ -186,13 +186,13 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
                 <p>{line.text}</p>
               ) : (
                 <>
-                  {line.tools?.length ? <p className="skill-chat__tools">· consultando {line.tools.join(", ")}</p> : null}
+                  {line.tools?.length ? <p className="skill-chat__tools">· Consultando {line.tools.join(", ")}</p> : null}
                   {splitReply(line.text).map((part, index) =>
                     part.kind === "text" ? (
                       <p key={index}>{part.content.trim()}</p>
                     ) : (
                       <div key={index} className="skill-chat__draft">
-                        <span>Borrador · <strong>{parseSkill(part.content).name ?? "sin nombre"}</strong></span>
+                        <span>Borrador · <strong>{parseSkill(part.content).name ?? "Sin nombre"}</strong></span>
                         {part.content === draft ? (
                           <span className="console-badge console-badge--ready">En el editor</span>
                         ) : (
@@ -249,7 +249,7 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
           </label>
           <div className="skill-chat__actions">
             <button type="button" className="linkbtn" onClick={reset} disabled={busy || !conversation}>
-              nueva sesión
+              Nueva sesión
             </button>
             <button className="btn btn--small" disabled={busy || !input.trim()}>
               {busy ? <Busy words={["ENVIANDO"]} /> : "Enviar"}

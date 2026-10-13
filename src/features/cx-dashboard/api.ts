@@ -305,9 +305,9 @@ export function isReady<T>(section: Section<T> | undefined): section is { status
 // --- the detail behind the lists -------------------------------------------------------
 
 const DETAIL_ERRORS = {
-  cx_not_connected: "Conecta tu llave del CX en llaves api.",
+  cx_not_connected: "Conecta tu llave del CX en Llaves API.",
   cx_missing_scope: "Tu llave del CX no tiene permiso para esto. Actívalo en la integración privada del CX.",
-  cx_invalid_token: "El CX rechazó tu llave. Reemplázala en llaves api.",
+  cx_invalid_token: "El CX rechazó tu llave. Reemplázala en Llaves API.",
   cx_rate_limited: "El CX pidió esperar un momento. Intenta en un minuto.",
   cx_error: "El CX no pudo responder. Intenta de nuevo.",
   cx_conversation_not_found: "Esa conversación ya no existe en el CX.",

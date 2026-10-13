@@ -34,8 +34,8 @@ function FeedbackLine({ feedback }: { feedback: Feedback }) {
 }
 
 function nameOf(members: User[] | undefined, id: string | null) {
-  if (!id) return "sin dueño";
-  return members?.find((m) => m.id === id)?.email ?? "persona eliminada";
+  if (!id) return "Sin dueño";
+  return members?.find((m) => m.id === id)?.email ?? "Persona eliminada";
 }
 
 /** The organization's settings, for its owners and admins. */
@@ -53,7 +53,7 @@ export function OrganizationSettings() {
         <TerminalBox title="ALMACENAMIENTO" status={overview.data ? formatBytes(overview.data.storage.bytes) : undefined}>
           {overview.loading ? (
             <p className="empty">
-              <Spinner /> calculando
+              <Spinner /> Calculando
             </p>
           ) : overview.error && !overview.data ? (
             <p className="alert alert--error">! {errorMessage(overview.error)}</p>
@@ -62,7 +62,7 @@ export function OrganizationSettings() {
           ) : null}
         </TerminalBox>
         <TerminalBox wide title="PROYECTOS SIN DUEÑO" status={overview.data ? `${overview.data.orphans.length}` : undefined}>
-          {overview.data ? <Orphans overview={overview.data} members={members} /> : <p className="empty"><Spinner /> cargando</p>}
+          {overview.data ? <Orphans overview={overview.data} members={members} /> : <p className="empty"><Spinner /> Cargando</p>}
         </TerminalBox>
         <TerminalBox wide title="USO DE IA">
           <UsageSection members={members} />
@@ -112,23 +112,23 @@ function Profile({ overview, members }: { overview: Overview | undefined; member
     <div className="stack">
       <form className="org__rename" onSubmit={save}>
         <label className="field">
-          <span className="field__label">nombre</span>
+          <span className="field__label">Nombre</span>
           <input className="field__input" value={value} maxLength={255} onChange={(e) => setName(e.target.value)} />
         </label>
         <button type="submit" className="btn btn--small" disabled={saving || !value.trim() || value.trim() === organization?.name}>
-          {saving ? <Busy words={["GUARDANDO"]} /> : "guardar"}
+          {saving ? <Busy words={["GUARDANDO"]} /> : "Guardar"}
         </button>
       </form>
       <FeedbackLine feedback={feedback} />
       <dl className="cx__facts">
-        <dt>creada</dt>
+        <dt>Creada</dt>
         <dd>{organization ? new Date(organization.createdAt).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }) : "—"}</dd>
-        <dt>propietario</dt>
+        <dt>Propietario</dt>
         <dd>{overview ? nameOf(members, overview.ownerId) : "—"}</dd>
       </dl>
       {seats && (
         <div className="stack">
-          <span className="cx__subtitle">asientos</span>
+          <span className="cx__subtitle">Asientos</span>
           {seats.limit === null ? (
             <p className="cx__lead">
               <strong>{number.format(seats.members)}</strong> personas{seats.pending ? ` + ${number.format(seats.pending)} invitaciones pendientes` : ""} · sin límite
@@ -168,12 +168,12 @@ function Storage({ overview, members }: { overview: Overview; members: User[] | 
     <div className="stack">
       <dl className="cx__figures">
         <div>
-          <dt>en total</dt>
+          <dt>En total</dt>
           <dd>{formatBytes(storage.bytes)}</dd>
           <span className="cx__muted">{number.format(storage.files)} archivos</span>
         </div>
         <div>
-          <dt>biblioteca</dt>
+          <dt>Biblioteca</dt>
           <dd>{storage.library ? formatBytes(storage.library.bytes) : "—"}</dd>
           {storage.library && <span className="cx__muted">{number.format(storage.library.files)} archivos</span>}
         </div>
@@ -182,10 +182,10 @@ function Storage({ overview, members }: { overview: Overview; members: User[] | 
         <table className="cx__table">
           <thead>
             <tr>
-              <th scope="col">persona</th>
-              <th scope="col">proyectos</th>
-              <th scope="col">archivos</th>
-              <th scope="col">espacio</th>
+              <th scope="col">Persona</th>
+              <th scope="col">Proyectos</th>
+              <th scope="col">Archivos</th>
+              <th scope="col">Espacio</th>
             </tr>
           </thead>
           <tbody>
@@ -212,7 +212,7 @@ function Orphans({ overview, members }: { overview: Overview; members: User[] | 
   const [feedback, setFeedback] = useState<Feedback>(null);
 
   if (!overview.orphans.length) {
-    return <p className="empty">todos los proyectos tienen dueño. ✓</p>;
+    return <p className="empty">Todos los proyectos tienen dueño. ✓</p>;
   }
 
   async function reassign(projectId: string, name: string) {
@@ -268,7 +268,7 @@ function Orphans({ overview, members }: { overview: Overview; members: User[] | 
                 value={owners[project.id] ?? ""}
                 onChange={(e) => setOwners((all) => ({ ...all, [project.id]: e.target.value }))}
               >
-                <option value="">elegir dueño…</option>
+                <option value="">Elegir dueño…</option>
                 {members?.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.email} · {ROLE_LABELS[m.role]}
@@ -276,10 +276,10 @@ function Orphans({ overview, members }: { overview: Overview; members: User[] | 
                 ))}
               </select>
               <button type="button" className="btn btn--small" disabled={!owners[project.id] || busy === project.id} onClick={() => reassign(project.id, project.name)}>
-                asignar
+                Asignar
               </button>
-              <ConfirmButton question="¿eliminar con sus archivos?" onConfirm={() => remove(project.id, project.name)}>
-                eliminar
+              <ConfirmButton question="¿Eliminar con sus archivos?" onConfirm={() => remove(project.id, project.name)}>
+                Eliminar
               </ConfirmButton>
             </span>
           </li>
@@ -424,7 +424,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
     <div className="stack">
       <div className="cx__filters">
         <label className="field">
-          <span className="field__label">periodo</span>
+          <span className="field__label">Periodo</span>
           <select className="field__input" value={months} onChange={(e) => setMonths(Number(e.target.value))}>
             <option value={3}>3 meses</option>
             <option value={6}>6 meses</option>
@@ -434,7 +434,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
       </div>
 
       <fieldset className="org__prices">
-        <legend className="cx__subtitle">precios de tu modelo · para calcular el costo</legend>
+        <legend className="cx__subtitle">Precios de tu modelo · para calcular el costo</legend>
         <p className="cx__note">
           Copia los tres precios del modelo que usa tu llave desde la página de tu proveedor:{" "}
           <a href="https://openai.com/api/pricing" target="_blank" rel="noreferrer noopener" className="linkbtn">
@@ -480,32 +480,32 @@ function UsageSection({ members }: { members: User[] | undefined }) {
 
       {usage.loading ? (
         <p className="empty">
-          <Spinner /> sumando el uso
+          <Spinner /> Sumando el uso
         </p>
       ) : usage.error && !data ? (
         <p className="alert alert--error">! {errorMessage(usage.error)}</p>
       ) : all && all.conversations === 0 ? (
-        <p className="empty">nadie ha conversado con el agente en este periodo.</p>
+        <p className="empty">Nadie ha conversado con el agente en este periodo.</p>
       ) : all ? (
         <>
           <dl className="cx__figures">
             <div>
-              <dt>conversaciones</dt>
+              <dt>Conversaciones</dt>
               <dd>{number.format(all.conversations)}</dd>
             </div>
             <div>
-              <dt>tokens de entrada</dt>
+              <dt>Tokens de entrada</dt>
               <dd>{compact(all.input)}</dd>
-              <span className="cx__muted">incluye {compact(all.cacheRead)} leídos de caché</span>
+              <span className="cx__muted">Incluye {compact(all.cacheRead)} leídos de caché</span>
             </div>
             <div>
-              <dt>tokens de salida</dt>
+              <dt>Tokens de salida</dt>
               <dd>{compact(all.output)}</dd>
             </div>
             <div>
-              <dt>costo estimado</dt>
+              <dt>Costo estimado</dt>
               <dd>{priced ? usd.format(cost(all)) : "—"}</dd>
-              {!priced && <span className="cx__muted">escribe los precios de entrada y salida abajo</span>}
+              {!priced && <span className="cx__muted">Escribe los precios de entrada y salida abajo</span>}
             </div>
           </dl>
 
@@ -527,12 +527,12 @@ function UsageSection({ members }: { members: User[] | undefined }) {
           <table className="cx__table">
             <thead>
               <tr>
-                <th scope="col">persona</th>
-                <th scope="col">conversaciones</th>
-                <th scope="col">entrada</th>
-                <th scope="col">salida</th>
-                <th scope="col">de ellos, caché</th>
-                <th scope="col">costo</th>
+                <th scope="col">Persona</th>
+                <th scope="col">Conversaciones</th>
+                <th scope="col">Entrada</th>
+                <th scope="col">Salida</th>
+                <th scope="col">De ellos, caché</th>
+                <th scope="col">Costo</th>
               </tr>
             </thead>
             <tbody>
@@ -607,12 +607,12 @@ function DangerZone({ members, self }: { members: User[] | undefined; self: User
     <div className="org__danger">
       <FeedbackLine feedback={feedback} />
       <form className="stack" onSubmit={transfer} aria-label="Transferir la propiedad">
-        <span className="cx__subtitle">transferir la propiedad</span>
+        <span className="cx__subtitle">Transferir la propiedad</span>
         <p className="cx__note">La otra persona pasa a ser propietaria y tú quedas como administrador. Solo ella podrá devolvértela.</p>
         <label className="field">
-          <span className="field__label">nuevo propietario</span>
+          <span className="field__label">Nuevo propietario</span>
           <select className="field__input" value={newOwner} onChange={(e) => setNewOwner(e.target.value)}>
-            <option value="">elegir persona…</option>
+            <option value="">Elegir persona…</option>
             {candidates.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.email} · {ROLE_LABELS[m.role]}
@@ -622,26 +622,26 @@ function DangerZone({ members, self }: { members: User[] | undefined; self: User
         </label>
         {chosen && (
           <label className="field">
-            <span className="field__label">escribe {chosen.email} para confirmar</span>
+            <span className="field__label">Escribe {chosen.email} para confirmar</span>
             <input className="field__input" value={transferTyped} autoComplete="off" onChange={(e) => setTransferTyped(e.target.value)} />
           </label>
         )}
         <button type="submit" className="btn btn--small" disabled={!chosen || transferTyped.trim().toLowerCase() !== chosen.email.toLowerCase() || busy !== null}>
-          {busy === "transfer" ? <Busy words={["TRANSFIRIENDO"]} /> : "transferir"}
+          {busy === "transfer" ? <Busy words={["TRANSFIRIENDO"]} /> : "Transferir"}
         </button>
       </form>
 
       <form className="stack" onSubmit={remove} aria-label="Eliminar la organización">
-        <span className="cx__subtitle">eliminar la organización</span>
+        <span className="cx__subtitle">Eliminar la organización</span>
         <p className="cx__note">
           Borra para siempre a todas las personas, conversaciones, proyectos, archivos, la biblioteca y el conocimiento. No se puede deshacer y no hay respaldo.
         </p>
         <label className="field">
-          <span className="field__label">escribe {organization ? `“${organization.name}”` : "el nombre"} para confirmar</span>
+          <span className="field__label">Escribe {organization ? `“${organization.name}”` : "el nombre"} para confirmar</span>
           <input className="field__input" value={deleteTyped} autoComplete="off" onChange={(e) => setDeleteTyped(e.target.value)} />
         </label>
         <button type="submit" className="btn btn--small org__delete" disabled={!organization || deleteTyped.trim() !== organization.name || busy !== null}>
-          {busy === "delete" ? <Busy words={["ELIMINANDO"]} /> : "eliminar la organización"}
+          {busy === "delete" ? <Busy words={["ELIMINANDO"]} /> : "Eliminar la organización"}
         </button>
       </form>
     </div>

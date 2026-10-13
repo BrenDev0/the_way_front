@@ -37,7 +37,7 @@ export function Field({ label, hint, revealable, type = "text", className, ...pr
             onClick={() => setRevealed((v) => !v)}
             aria-label={revealed ? "Ocultar contraseña" : "Mostrar contraseña"}
           >
-            {revealed ? "[ocultar]" : "[ver]"}
+            {revealed ? "[Ocultar]" : "[Ver]"}
           </button>
         )}
       </div>

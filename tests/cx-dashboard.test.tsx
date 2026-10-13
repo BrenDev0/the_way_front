@@ -149,24 +149,24 @@ beforeEach(() => {
   window.history.replaceState(null, "", "/cx");
 });
 
-describe("mi cx tabs", () => {
+describe("mi CX tabs", () => {
   it("opens on the summary, with what needs attention and badges on the tabs that need someone", async () => {
     render(<CxDashboard />);
 
-    expect(await screen.findByText("esperando respuesta")).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "resumen" })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: /conversaciones/ })).toHaveTextContent("3");
-    expect(screen.getByRole("tab", { name: /equipo/ })).toHaveTextContent("46");
+    expect(await screen.findByText("Esperando respuesta")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Resumen" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: /Conversaciones/ })).toHaveTextContent("3");
+    expect(screen.getByRole("tab", { name: /Equipo/ })).toHaveTextContent("46");
     expect(card("QUÉ ATENDER")).toHaveTextContent("46 tareas vencidas del equipo");
   });
 
   it("jumps from an alert to its tab and keeps the tab in the address", async () => {
     render(<CxDashboard />);
-    await screen.findByText("esperando respuesta");
+    await screen.findByText("Esperando respuesta");
 
-    await userEvent.click(within(card("QUÉ ATENDER")).getAllByRole("button", { name: "ver equipo" })[0]);
+    await userEvent.click(within(card("QUÉ ATENDER")).getAllByRole("button", { name: "Ver equipo" })[0]);
 
-    expect(screen.getByRole("tab", { name: /equipo/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: /Equipo/ })).toHaveAttribute("aria-selected", "true");
     expect(window.location.hash).toBe("#equipo");
     expect(card("TAREAS")).toHaveTextContent("Llamar a Ana");
     expect(card("TAREAS")).toHaveTextContent("Brenda Ruiz");
@@ -174,21 +174,21 @@ describe("mi cx tabs", () => {
 
   it("moves between tabs with the arrow keys", async () => {
     render(<CxDashboard />);
-    const summary = await screen.findByRole("tab", { name: "resumen" });
+    const summary = await screen.findByRole("tab", { name: "Resumen" });
 
     summary.focus();
     await userEvent.keyboard("{ArrowRight}");
-    expect(screen.getByRole("tab", { name: "ventas" })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tab", { name: "ventas" })).toHaveFocus();
+    expect(screen.getByRole("tab", { name: "Ventas" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Ventas" })).toHaveFocus();
     await userEvent.keyboard("{End}");
-    expect(screen.getByRole("tab", { name: "clientes" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Clientes" })).toHaveAttribute("aria-selected", "true");
   });
 });
 
 describe("mi cx sections", () => {
   it("puts the freshest unanswered first in conversations", async () => {
     render(<CxDashboard />);
-    await openTab(/conversaciones/);
+    await openTab(/Conversaciones/);
 
     const names = within(card("POR CONTESTAR")).getAllByRole("listitem").map((li) => li.textContent);
     expect(names.find((t) => t?.includes("Ana López"))).toContain("18 min");
@@ -198,20 +198,20 @@ describe("mi cx sections", () => {
 
   it("calls out mistyped amounts and shows growth in sales", async () => {
     render(<CxDashboard />);
-    await openTab("ventas");
+    await openTab("Ventas");
 
     expect(screen.getByText(/Revisa 3 montos/).closest("p")).toHaveTextContent("No se cuentan en el valor del pipeline");
     const growth = card("CRECIMIENTO · 12 MESES");
-    expect(within(growth).getByRole("figure", { name: "leads por mes" })).toBeInTheDocument();
+    expect(within(growth).getByRole("figure", { name: "Leads por mes" })).toBeInTheDocument();
     expect(within(growth).getByText(/-94/)).toBeInTheDocument();
-    await userEvent.click(within(growth).getByRole("radio", { name: /cobrado/ }));
+    await userEvent.click(within(growth).getByRole("radio", { name: /Cobrado/ }));
     expect(within(growth).getByText("payments/transactions.readonly")).toBeInTheDocument();
     expect(within(card("PAGOS COBRADOS")).getByText("payments/transactions.readonly")).toBeInTheDocument();
   });
 
   it("shows reach, what content works, the best time and the top posts in social", async () => {
     render(<CxDashboard />);
-    await openTab("redes sociales");
+    await openTab("Redes sociales");
 
     expect(card("ALCANCE · ÚLTIMOS 7 DÍAS")).toHaveTextContent("+347% vs semana anterior");
     expect(within(card("ALCANCE · ÚLTIMOS 7 DÍAS")).getByRole("figure", { name: "Impresiones por día, últimos 7 días" })).toBeInTheDocument();
@@ -219,15 +219,15 @@ describe("mi cx sections", () => {
     expect(card("MEJOR MOMENTO PARA PUBLICAR")).toHaveTextContent("lunes por la tarde");
     const top = within(card("LO QUE MÁS FUNCIONÓ")).getByRole("list", { name: "Publicaciones con más interacciones" });
     expect(top).toHaveTextContent("Soul Story Kids en acción");
-    expect(within(top).getByRole("link", { name: /ver publicación/ })).toHaveAttribute("href", "https://example.com/p1");
+    expect(within(top).getByRole("link", { name: /Ver publicación/ })).toHaveAttribute("href", "https://example.com/p1");
   });
 
   it("names the team and explains how to start NPS", async () => {
     render(<CxDashboard />);
-    await openTab(/equipo/);
+    await openTab(/Equipo/);
     expect(card("QUIÉN RESPONDE Y QUÉ TAN RÁPIDO")).toHaveTextContent("Carlos Pérez");
 
-    await openTab("clientes");
+    await openTab("Clientes");
     const nps = card("NPS");
     expect(nps).toHaveTextContent("necesitas una encuesta en el CX");
     expect(within(nps).getAllByRole("listitem")).toHaveLength(3);
@@ -246,9 +246,9 @@ describe("mi cx sections", () => {
 
   it("re-reads CX on demand and with the chosen period", async () => {
     render(<CxDashboard />);
-    await screen.findByText("esperando respuesta");
+    await screen.findByText("Esperando respuesta");
 
-    await userEvent.click(screen.getByRole("button", { name: "actualizar" }));
+    await userEvent.click(screen.getByRole("button", { name: "Actualizar" }));
     await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("refresh=true"))).toBe(true));
 
     await userEvent.click(screen.getByRole("radio", { name: /90 días/ }));
@@ -259,10 +259,10 @@ describe("mi cx sections", () => {
     const { tasks: _tasks, handovers: _handovers, ...older } = DASHBOARD;
     response = older;
     render(<CxDashboard />);
-    await screen.findByText("esperando respuesta");
+    await screen.findByText("Esperando respuesta");
 
-    await openTab(/equipo/);
-    expect(card("TAREAS")).toHaveTextContent("pulsa actualizar para ver esta sección");
+    await openTab(/Equipo/);
+    expect(card("TAREAS")).toHaveTextContent("Pulsa actualizar para ver esta sección");
   });
 });
 
@@ -270,31 +270,36 @@ describe("dashboard formats", () => {
   it("says waits the way people do and keeps big money short", () => {
     expect([waited(0.3), waited(5), waited(50), waited(24 * 200)]).toEqual(["18 min", "5 h", "2 días", "7 meses"]);
     expect(money(25554)).toBe("$25,554");
-    expect(money(1_250_000)).toMatch(/^\$1\.3\sM$/);
+    // The compact unit is ours, not ICU's, so these hold whatever locale data the runtime ships.
+    expect(money(999_999)).toBe("$999,999");
+    expect(money(1_250_000)).toBe("$1.3\u00a0M");
+    expect(money(-1_000_000)).toBe("-$1\u00a0M");
+    expect(money(1_250_000_000)).toBe("$1,250\u00a0M");
+    expect(money(3.4e12)).toBe("$3.4\u00a0B");
   });
 });
 
 describe("mi cx details", () => {
   it("opens a conversation, loads older messages and replies on the client's channel", async () => {
     render(<CxDashboard />);
-    await openTab(/conversaciones/);
+    await openTab(/Conversaciones/);
 
     await userEvent.click(within(card("POR CONTESTAR")).getByRole("button", { name: "Abrir la conversación con Ana López" }));
     const panel = await screen.findByRole("dialog", { name: "Ana López" });
     const messages = await within(panel).findByRole("list", { name: "Mensajes con Ana López" });
     expect(messages).toHaveTextContent("¿Tienen precio?");
-    expect(panel).toHaveTextContent("asignado a Brenda Ruiz");
+    expect(panel).toHaveTextContent("Asignado a Brenda Ruiz");
 
-    await userEvent.click(within(panel).getByRole("button", { name: "ver mensajes anteriores" }));
+    await userEvent.click(within(panel).getByRole("button", { name: "Ver mensajes anteriores" }));
     expect(await within(messages).findByText("Hola Ana, bienvenida")).toBeInTheDocument();
 
-    await userEvent.type(within(panel).getByLabelText("responder por whatsapp"), "Sí, te mando la lista");
-    await userEvent.click(within(panel).getByRole("button", { name: "enviar" }));
+    await userEvent.type(within(panel).getByLabelText("Responder por whatsapp"), "Sí, te mando la lista");
+    await userEvent.click(within(panel).getByRole("button", { name: "Enviar" }));
 
     const posted = fetchMock.mock.calls.filter(([url, init]) => String(url).endsWith("/reply") && init?.method === "POST");
     expect(posted.map(([, init]) => JSON.parse(init.body))).toEqual([{ message: "Sí, te mando la lista" }]);
     expect(await within(messages).findByText("Sí, te mando la lista")).toBeInTheDocument();
-    expect(within(panel).getByLabelText("responder por whatsapp")).toHaveValue("");
+    expect(within(panel).getByLabelText("Responder por whatsapp")).toHaveValue("");
 
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -302,11 +307,11 @@ describe("mi cx details", () => {
 
   it("shows how long is left to answer inside WhatsApp's 24-hour window", async () => {
     render(<CxDashboard />);
-    await openTab(/conversaciones/);
+    await openTab(/Conversaciones/);
     await userEvent.click(within(card("POR CONTESTAR")).getByRole("button", { name: "Abrir la conversación con Ana López" }));
     const panel = await screen.findByRole("dialog", { name: "Ana López" });
 
-    expect(await within(panel).findByText(/quedan 5 h de la ventana de 24 h/)).toBeInTheDocument();
+    expect(await within(panel).findByText(/Quedan 5 h de la ventana de 24 h/)).toBeInTheDocument();
   });
 
   it("does not offer to reply once WhatsApp's 24-hour window has closed", async () => {
@@ -315,7 +320,7 @@ describe("mi cx details", () => {
       replyWindow: { open: false, closesAt: new Date(Date.now() - 26 * 3_600_000).toISOString(), lastInbound: new Date(Date.now() - 50 * 3_600_000).toISOString(), reason: "window_closed" },
     };
     render(<CxDashboard />);
-    await openTab(/conversaciones/);
+    await openTab(/Conversaciones/);
     expect(within(card("POR CONTESTAR")).getByRole("button", { name: "Abrir la conversación con Luis" })).toHaveTextContent("ventana cerrada");
 
     await userEvent.click(within(card("POR CONTESTAR")).getByRole("button", { name: "Abrir la conversación con Ana López" }));
@@ -323,37 +328,37 @@ describe("mi cx details", () => {
 
     expect(await within(panel).findByText("La ventana de 24 h de WhatsApp está cerrada.")).toBeInTheDocument();
     expect(panel).toHaveTextContent("escribió por última vez hace 2 días");
-    expect(within(panel).queryByRole("button", { name: "enviar" })).not.toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: "Enviar" })).not.toBeInTheDocument();
     expect(within(panel).queryByRole("textbox")).not.toBeInTheDocument();
   });
 
   it("says why CX refused a reply and keeps the draft", async () => {
     reply = { sent: false, reason: "rejected", detail: "Outside the 24 hour window" };
     render(<CxDashboard />);
-    await openTab(/conversaciones/);
+    await openTab(/Conversaciones/);
     await userEvent.click(within(card("POR CONTESTAR")).getByRole("button", { name: "Abrir la conversación con Ana López" }));
     const panel = await screen.findByRole("dialog", { name: "Ana López" });
     await within(panel).findByRole("list", { name: "Mensajes con Ana López" });
 
-    await userEvent.type(within(panel).getByLabelText("responder por whatsapp"), "Hola");
-    await userEvent.click(within(panel).getByRole("button", { name: "enviar" }));
+    await userEvent.type(within(panel).getByLabelText("Responder por whatsapp"), "Hola");
+    await userEvent.click(within(panel).getByRole("button", { name: "Enviar" }));
 
     expect(await within(panel).findByRole("alert")).toHaveTextContent("Outside the 24 hour window");
-    expect(within(panel).getByLabelText("responder por whatsapp")).toHaveValue("Hola");
+    expect(within(panel).getByLabelText("Responder por whatsapp")).toHaveValue("Hola");
   });
 
   it("lists every post by name, filters by network and opens one", async () => {
     render(<CxDashboard />);
-    await openTab("redes sociales");
+    await openTab("Redes sociales");
 
     const list = await within(card("TODAS LAS PUBLICACIONES")).findByRole("list", { name: "Todas las publicaciones" });
     expect(within(list).getAllByRole("button").map((b) => b.textContent)).toEqual([
       expect.stringContaining("México se siente"),
       expect.stringContaining("Soul Story Kids en acción"),
     ]);
-    expect(within(list).getAllByRole("button")[0]).toHaveTextContent("sin métricas");
+    expect(within(list).getAllByRole("button")[0]).toHaveTextContent("Sin métricas");
 
-    await userEvent.selectOptions(within(card("TODAS LAS PUBLICACIONES")).getByLabelText("red"), "instagram");
+    await userEvent.selectOptions(within(card("TODAS LAS PUBLICACIONES")).getByLabelText("Red"), "instagram");
     expect(within(list).getAllByRole("button")).toHaveLength(1);
 
     await userEvent.click(within(list).getByRole("button", { name: /Soul Story Kids/ }));
@@ -365,7 +370,7 @@ describe("mi cx details", () => {
   it("opens an ad to see its leads and where they stand", async () => {
     response = { ...DASHBOARD, ads: { status: "ok", ads: [{ name: "Videos donde tu hij@ es el protagonista", leads: 268, opportunities: 265, won: 0, value: 0, toOpportunity: 0.989 }], attributed: 268, leads: 300, attributedShare: 0.89, best: null, campaigns: [] } };
     render(<CxDashboard />);
-    await openTab("marketing");
+    await openTab("Marketing");
 
     await userEvent.click(within(card("ANUNCIOS")).getByRole("button", { name: "Videos donde tu hij@ es el protagonista" }));
     const panel = await screen.findByRole("dialog", { name: "Videos donde tu hij@ es el protagonista" });

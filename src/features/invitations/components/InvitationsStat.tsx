@@ -8,9 +8,9 @@ export function InvitationsStat() {
 
   return (
     <StatTile
-      label="invitaciones"
+      label="Invitaciones"
       value={data?.length}
-      detail={data?.length ? "pendientes de aceptar" : "ninguna pendiente"}
+      detail={data?.length ? "Pendientes de aceptar" : "Ninguna pendiente"}
       loading={loading}
       failed={Boolean(error) && !data}
     />

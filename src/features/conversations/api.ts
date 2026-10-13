@@ -35,7 +35,7 @@ export interface ConversationMessage {
 const errors = {
   conversation_not_found: "La conversación ya no existe.",
   conversation_busy: "El agente sigue trabajando en el mensaje anterior.",
-  api_key_not_configured: "No tienes una llave de Anthropic u OpenAI asignada. Asígnate una en llaves api.",
+  api_key_not_configured: "No tienes una llave de Anthropic u OpenAI asignada. Asígnate una en Llaves API.",
   conversation_not_paused: "La conversación ya no está en pausa.",
 };
 
@@ -76,7 +76,7 @@ export function pauseText(pause: TurnPause | null | undefined): { title: string;
     case "quota":
       return {
         title: "La llave de IA se quedó sin saldo",
-        body: "La cuenta del proveedor llegó a su cuota o límite de gasto. Recarga saldo o asigna otra llave en llaves api, y reanuda.",
+        body: "La cuenta del proveedor llegó a su cuota o límite de gasto. Recarga saldo o asigna otra llave en Llaves API, y reanuda.",
       };
     case "timeout":
       return { title: "El modelo tardó demasiado en responder", body: "La solicitud excedió el tiempo de espera. Reanuda para intentarlo de nuevo." };
@@ -85,7 +85,7 @@ export function pauseText(pause: TurnPause | null | undefined): { title: string;
     case "credentials":
       return {
         title: "El proveedor rechazó la llave de IA",
-        body: "La llave es inválida, fue revocada o no tiene acceso a este modelo. Revísala en llaves api, y reanuda.",
+        body: "La llave es inválida, fue revocada o no tiene acceso a este modelo. Revísala en Llaves API, y reanuda.",
       };
     case "interrupted":
       return { title: "El servidor se reinició a mitad de la respuesta", body: "Reanuda para continuar desde el último paso guardado." };

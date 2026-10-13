@@ -6,6 +6,7 @@ import { listSkills, type Skill } from "../api";
 import { serializeSkill } from "../draft";
 import { SkillCoworking } from "./SkillCoworking";
 import { SkillEditor } from "./SkillEditor";
+import { SkillKitImporter } from "./SkillKitImporter";
 import { SkillUploader } from "./SkillUploader";
 import { SkillsLibrary } from "./SkillsLibrary";
 
@@ -35,6 +36,7 @@ export function SkillsWorkspace() {
         <SkillEditor draft={draft} dirty={dirty} skills={skills.data} onChange={setDraft} onSaved={setBaseline} />
       </div>
       <SkillUploader skills={skills.data} dirty={dirty} onOpen={(content) => setDraft(content)} />
+      <SkillKitImporter skills={skills.data} />
       <SkillsLibrary
         skills={skills.data}
         loading={skills.loading}

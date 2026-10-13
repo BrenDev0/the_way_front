@@ -8,8 +8,8 @@ export default function KnowledgePage() {
       <div className="dash knowledge-page">
         <PageHeader
           kicker="ORGANIZACIÓN :: CONOCIMIENTO"
-          title="conocimiento de la organización"
-          description="la referencia compartida que ayuda al agente a apoyar a todo el equipo."
+          title="Conocimiento de la organización"
+          description="La referencia compartida que ayuda al agente a apoyar a todo el equipo."
         />
         <KnowledgeOverview />
         <DocumentUploader />

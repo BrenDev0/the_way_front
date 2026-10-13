@@ -52,17 +52,17 @@ export function alertsOf(d: Dashboard): Alert[] {
   if (isReady(d.pipeline) && d.pipeline.open > 0 && d.pipeline.stale >= d.pipeline.open * 0.8)
     alerts.push({ tone: "info", text: `${share(d.pipeline.stale / d.pipeline.open)} del pipeline lleva ${d.pipeline.staleDays}+ días sin moverse`, tab: "ventas" });
   if (isReady(d.sales) && d.sales.won + d.sales.lost === 0 && isReady(d.pipeline) && d.pipeline.open > 0)
-    alerts.push({ tone: "info", text: "ninguna oportunidad se marcó ganada o perdida en el periodo", tab: "ventas" });
+    alerts.push({ tone: "info", text: "Ninguna oportunidad se marcó ganada o perdida en el periodo", tab: "ventas" });
   const content = isReady(d.social) ? d.social.content : undefined;
   if (content?.daysSinceLastPost != null && content.daysSinceLastPost >= 7)
     alerts.push({ tone: "info", text: `${count(content.daysSinceLastPost)} días sin publicar en redes`, tab: "redes" });
-  if (d.nps?.status === "no_survey") alerts.push({ tone: "info", text: "todavía no mides el NPS", tab: "clientes" });
+  if (d.nps?.status === "no_survey") alerts.push({ tone: "info", text: "Todavía no mides el NPS", tab: "clientes" });
   return alerts;
 }
 
 export function AlertsCard({ dashboard, onOpen }: { dashboard: Dashboard; onOpen: (tab: string) => void }) {
   const alerts = alertsOf(dashboard);
-  if (!alerts.length) return <p className="empty">nada urgente. ✓</p>;
+  if (!alerts.length) return <p className="empty">Nada urgente. ✓</p>;
   return (
     <ul className="cx__alerts">
       {alerts.map((alert) => (
@@ -70,7 +70,7 @@ export function AlertsCard({ dashboard, onOpen }: { dashboard: Dashboard; onOpen
           <span aria-hidden="true">{alert.tone === "warn" ? "⚠" : "ⓘ"}</span>
           <span className="cx__alert-text">{alert.text}</span>
           <button type="button" className="linkbtn" onClick={() => onOpen(alert.tab)}>
-            ver {alert.tab}
+            Ver {alert.tab}
           </button>
         </li>
       ))}
@@ -87,9 +87,9 @@ export function HandoversCard({ handovers }: { handovers: Handovers }) {
         <strong>{count(handovers.handedOver)}</strong> de {count(handovers.leads)} leads del periodo pasaron del agente de IA a una persona
         {handovers.handoverRate !== null && <> ({share(handovers.handoverRate)})</>}.
       </p>
-      <p className="cx__note">se cuentan los contactos con etiquetas como “human handover”, “transferencia a humano” o “stop bot”.</p>
-      <span className="cx__subtitle">etiquetas de los leads del periodo</span>
-      <RankedBars label="Etiquetas de los leads" rows={handovers.tags.map((t) => ({ name: t.name, value: t.count }))} empty="los leads del periodo no tienen etiquetas" />
+      <p className="cx__note">Se cuentan los contactos con etiquetas como “human handover”, “transferencia a humano” o “stop bot”.</p>
+      <span className="cx__subtitle">Etiquetas de los leads del periodo</span>
+      <RankedBars label="Etiquetas de los leads" rows={handovers.tags.map((t) => ({ name: t.name, value: t.count }))} empty="Los leads del periodo no tienen etiquetas" />
     </div>
   );
 }
@@ -101,18 +101,18 @@ export function TasksCard({ tasks, users }: { tasks: Tasks; users: Record<string
     <div className="stack">
       <Figures
         items={[
-          { label: "abiertas", value: count(tasks.open) },
-          { label: "vencidas", value: count(tasks.overdue), note: tasks.open ? share(tasks.overdue / tasks.open) : null },
-          { label: "vencen hoy", value: count(tasks.dueToday) },
+          { label: "Abiertas", value: count(tasks.open) },
+          { label: "Vencidas", value: count(tasks.overdue), note: tasks.open ? share(tasks.overdue / tasks.open) : null },
+          { label: "Vencen hoy", value: count(tasks.dueToday) },
         ]}
       />
       {tasks.byPerson.length > 0 && (
         <table className="cx__table">
           <thead>
             <tr>
-              <th scope="col">persona</th>
-              <th scope="col">abiertas</th>
-              <th scope="col">vencidas</th>
+              <th scope="col">Persona</th>
+              <th scope="col">Abiertas</th>
+              <th scope="col">Vencidas</th>
             </tr>
           </thead>
           <tbody>
@@ -128,14 +128,14 @@ export function TasksCard({ tasks, users }: { tasks: Tasks; users: Record<string
       )}
       {tasks.overdueList.length > 0 && (
         <>
-          <span className="cx__subtitle">las más atrasadas</span>
+          <span className="cx__subtitle">Las más atrasadas</span>
           <ul className="cx__list">
             {tasks.overdueList.map((t) => (
               <li key={t.id}>
                 <span className="cx__list-main">
                   <strong>{t.title}</strong>
                   <span className="cx__muted">
-                    {[t.contact, t.assignedTo ? users[t.assignedTo] ?? person(t.assignedTo, null) : "sin asignar"].filter(Boolean).join(" · ")}
+                    {[t.contact, t.assignedTo ? users[t.assignedTo] ?? person(t.assignedTo, null) : "Sin asignar"].filter(Boolean).join(" · ")}
                   </span>
                 </span>
                 <span className="cx__list-side cx__wait cx__wait--late">
@@ -153,15 +153,15 @@ export function TasksCard({ tasks, users }: { tasks: Tasks; users: Record<string
 // --- redes ----------------------------------------------------------------------------
 
 export function SocialReachCard({ social }: { social: Social }) {
-  if (!social.accounts) return <p className="empty">no hay redes conectadas al planificador social del CX.</p>;
+  if (!social.accounts) return <p className="empty">No hay redes conectadas al planificador social del CX.</p>;
   return (
     <div className="stack">
       <Figures
         items={[
-          { label: "impresiones", value: count(social.impressions ?? 0), note: change(social.impressionsChange ?? null) ? `${change(social.impressionsChange ?? null)} vs semana anterior` : null },
-          { label: "alcance", value: social.reach == null ? "—" : count(social.reach), note: change(social.reachChange ?? null) },
-          { label: "interacciones", value: count(social.interactions ?? 0), note: social.engagementRate == null ? null : `tasa ${share(social.engagementRate)}` },
-          { label: "seguidores nuevos", value: social.newFollowers == null ? "—" : count(social.newFollowers) },
+          { label: "Impresiones", value: count(social.impressions ?? 0), note: change(social.impressionsChange ?? null) ? `${change(social.impressionsChange ?? null)} vs semana anterior` : null },
+          { label: "Alcance", value: social.reach == null ? "—" : count(social.reach), note: change(social.reachChange ?? null) },
+          { label: "Interacciones", value: count(social.interactions ?? 0), note: social.engagementRate == null ? null : `Tasa ${share(social.engagementRate)}` },
+          { label: "Seguidores nuevos", value: social.newFollowers == null ? "—" : count(social.newFollowers) },
         ]}
       />
       {social.series && social.series.length > 0 && (
@@ -171,7 +171,7 @@ export function SocialReachCard({ social }: { social: Social }) {
           dateLabel={(key) => DAYS[key.split("-")[1]] ?? key.split("-")[1]}
         />
       )}
-      <span className="cx__subtitle">impresiones por red</span>
+      <span className="cx__subtitle">Impresiones por red</span>
       <RankedBars
         label="Impresiones por red social"
         rows={(social.platforms ?? []).map((p) => ({ name: network(p.name), value: p.impressions }))}
@@ -179,7 +179,7 @@ export function SocialReachCard({ social }: { social: Social }) {
           const platform = social.platforms?.find((p) => network(p.name) === row.name);
           return platform?.engagement ? `${count(platform.engagement)} interacciones` : null;
         }}
-        empty="sin impresiones esta semana"
+        empty="Sin impresiones esta semana"
       />
       <p className="cx__note">
         {count(social.accounts)} redes conectadas{social.networks?.length ? ` (${social.networks.map(network).join(", ")})` : ""}. El CX da estas
@@ -209,16 +209,16 @@ export function ContentCard({ content }: { content: Content }) {
     <div className="stack">
       <Figures
         items={[
-          { label: "publicaciones", value: count(content.published), note: `${content.perWeek.toLocaleString("es-MX")} por semana` },
-          { label: "interacciones", value: count(content.engagement), note: `${count(content.likes)} likes · ${count(content.comments)} comentarios · ${count(content.shares)} compartidos` },
-          { label: "por publicación", value: content.average === null ? "—" : content.average.toLocaleString("es-MX", { maximumFractionDigits: 1 }) },
+          { label: "Publicaciones", value: count(content.published), note: `${content.perWeek.toLocaleString("es-MX")} por semana` },
+          { label: "Interacciones", value: count(content.engagement), note: `${count(content.likes)} likes · ${count(content.comments)} comentarios · ${count(content.shares)} compartidos` },
+          { label: "Por publicación", value: content.average === null ? "—" : content.average.toLocaleString("es-MX", { maximumFractionDigits: 1 }) },
           {
-            label: "última publicación",
-            value: content.daysSinceLastPost === null ? "—" : content.daysSinceLastPost === 0 ? "hoy" : `hace ${count(content.daysSinceLastPost)} días`,
+            label: "Última publicación",
+            value: content.daysSinceLastPost === null ? "—" : content.daysSinceLastPost === 0 ? "Hoy" : `Hace ${count(content.daysSinceLastPost)} días`,
           },
         ]}
       />
-      <span className="cx__subtitle">interacciones promedio por publicación, por red</span>
+      <span className="cx__subtitle">Interacciones promedio por publicación, por red</span>
       <RankedBars
         label="Interacciones promedio por red"
         rows={content.byPlatform.map((p) => ({ name: network(p.name), value: p.average ?? 0 }))}
@@ -227,15 +227,15 @@ export function ContentCard({ content }: { content: Content }) {
           const p = content.byPlatform.find((x) => network(x.name) === row.name);
           return p ? `${count(p.posts)} publicaciones` : null;
         }}
-        empty="ninguna red reporta interacciones por publicación en este periodo"
+        empty="Ninguna red reporta interacciones por publicación en este periodo"
       />
-      <span className="cx__subtitle">por formato</span>
+      <span className="cx__subtitle">Por formato</span>
       <RankedBars
         label="Interacciones promedio por formato"
-        rows={content.byFormat.map((f) => ({ name: f.name === "reel" ? "reels / video corto" : "publicación", value: f.average ?? 0 }))}
+        rows={content.byFormat.map((f) => ({ name: f.name === "reel" ? "Reels / video corto" : "Publicación", value: f.average ?? 0 }))}
         format={(v) => v.toLocaleString("es-MX", { maximumFractionDigits: 1 })}
       />
-      <span className="cx__subtitle">publicado por red</span>
+      <span className="cx__subtitle">Publicado por red</span>
       <RankedBars label="Publicaciones por red" rows={content.postsByPlatform.map((p) => ({ name: network(p.name), value: p.count }))} />
       <Unmeasured content={content} />
     </div>
@@ -257,17 +257,17 @@ export function TimingCard({ content }: { content: Content }) {
           "Todavía no hay suficientes publicaciones con métricas para saber qué día u hora funciona mejor."
         )}
       </p>
-      <span className="cx__subtitle">interacciones promedio por día</span>
+      <span className="cx__subtitle">Interacciones promedio por día</span>
       <RankedBars label="Interacciones promedio por día de la semana" rows={content.byWeekday.map((d) => ({ name: d.name, value: d.average ?? 0 }))} format={fmt} detail={(row) => `${count(content.byWeekday.find((d) => d.name === row.name)?.posts ?? 0)} pub.`} />
-      <span className="cx__subtitle">por momento del día</span>
+      <span className="cx__subtitle">Por momento del día</span>
       <RankedBars label="Interacciones promedio por momento del día" rows={content.byDaypart.map((d) => ({ name: d.name, value: d.average ?? 0 }))} format={fmt} detail={(row) => `${count(content.byDaypart.find((d) => d.name === row.name)?.posts ?? 0)} pub.`} />
-      <p className="cx__note">sobre {count(content.patternSample)} publicaciones con métricas de los últimos 90 días o más; un día necesita 3 publicaciones para contar.</p>
+      <p className="cx__note">Sobre {count(content.patternSample)} publicaciones con métricas de los últimos 90 días o más; un día necesita 3 publicaciones para contar.</p>
     </div>
   );
 }
 
 export function TopPostsCard({ content }: { content: Content }) {
-  if (!content.top.length) return <p className="empty">no hay publicaciones con métricas en este periodo.</p>;
+  if (!content.top.length) return <p className="empty">No hay publicaciones con métricas en este periodo.</p>;
   return (
     <ul className="cx__posts" aria-label="Publicaciones con más interacciones">
       {content.top.map((post) => (
@@ -280,13 +280,13 @@ export function TopPostsCard({ content }: { content: Content }) {
               {network(post.platform)} · {post.format === "reel" ? "reel" : "publicación"} ·{" "}
               {new Date(post.publishedAt).toLocaleDateString("es-MX", { day: "numeric", month: "short" })}
             </span>
-            <span className="cx__post-caption">{post.caption || "(sin texto)"}</span>
+            <span className="cx__post-caption">{post.caption || "(Sin texto)"}</span>
             <span className="cx__post-stats">
               <strong>{count(post.engagement)}</strong> interacciones · {count(post.likes)} likes · {count(post.comments)} comentarios · {count(post.shares)} compartidos
             </span>
             {post.link && (
               <a href={post.link} target="_blank" rel="noreferrer noopener" className="linkbtn">
-                ver publicación ↗
+                Ver publicación ↗
               </a>
             )}
           </span>

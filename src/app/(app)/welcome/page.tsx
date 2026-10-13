@@ -18,7 +18,10 @@ export default function InviteWelcomePage() {
         {canManage ? (
           <Link href="/home" className="btn invite-welcome__primary">Entrar a mi espacio <span aria-hidden="true">↗</span></Link>
         ) : (
-          <p>Tu espacio de trabajo será THE WAY Desktop. Tu cuenta ya está activada.</p>
+          <>
+            <p>Tu espacio de trabajo será THE WAY Desktop. Tu cuenta ya está activada.</p>
+            <Link href="/download" className="btn invite-welcome__primary">Descargar THE WAY Desktop <span aria-hidden="true">↓</span></Link>
+          </>
         )}
         <span className="invite-welcome__mark" aria-hidden="true">✓</span>
       </section>
@@ -27,7 +30,7 @@ export default function InviteWelcomePage() {
         <div className="invite-welcome__detail">
           <span className="invite-welcome__number">01 / IDENTIDAD</span>
           <strong>{user.email}</strong>
-          <span>Tu cuenta está activa como {ROLE_LABELS[user.role]}.</span>
+          <span>Tu cuenta está activa como {ROLE_LABELS[user.role].toLowerCase()}.</span>
         </div>
         <div className="invite-welcome__detail">
           <span className="invite-welcome__number">02 / ORGANIZACIÓN</span>
@@ -46,7 +49,7 @@ export default function InviteWelcomePage() {
           <div>
             <p className="invite-welcome__number">TU ROL / GESTIÓN</p>
             <h2 id="invite-welcome-manage-title">Prepara el espacio para tu equipo.</h2>
-            <p>Como {ROLE_LABELS[user.role]}, puedes gestionar las fuentes de conocimiento y consultar el directorio de operadores.</p>
+            <p>Como {ROLE_LABELS[user.role].toLowerCase()}, puedes gestionar las fuentes de conocimiento y consultar el directorio de operadores.</p>
           </div>
           <div className="invite-welcome__links">
             <Link href="/knowledge">Explorar conocimiento <span aria-hidden="true">↗</span></Link>
