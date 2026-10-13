@@ -7,6 +7,7 @@ export interface Installer {
   label: string;
   filename: string;
   available: boolean;
+  version: string | null;
   sizeBytes: number | null;
   updatedAt: string | null;
 }

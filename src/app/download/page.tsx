@@ -37,6 +37,7 @@ const STEPS: Record<Platform, { heading: string; steps: ReactNode[] }> = {
 function details(installer: Installer) {
   if (!installer.available) return "Aún no publicado";
   const parts = [];
+  if (installer.version) parts.push(`v${installer.version}`);
   if (installer.sizeBytes) parts.push(`${Math.round(installer.sizeBytes / 1_000_000)} MB`);
   if (installer.updatedAt) {
     parts.push(`Actualizado ${new Date(installer.updatedAt).toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" })}`);
