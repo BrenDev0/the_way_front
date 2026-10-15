@@ -295,6 +295,7 @@ function BrandPanel({
           </span>
           <span className="dropzone__title">{dragging ? "Suelta para añadir" : `Arrastra logos, imágenes o el manual de ${brand.folder.name}`}</span>
           <span className="dropzone__hint">png · jpg · svg · webp · pdf · fuentes — máx 200 MB</span>
+          <span className="dropzone__hint">Un logo se reconoce por llevar «logo» en el nombre (p. ej. logo-claro.svg)</span>
           <input
             ref={inputRef}
             type="file"
