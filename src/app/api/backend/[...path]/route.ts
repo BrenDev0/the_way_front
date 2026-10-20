@@ -8,6 +8,11 @@ const FORWARDED_REQUEST_HEADERS = ["content-type", "cookie", "accept"];
 const SESSION_COOKIE = "session";
 const SESSION_ERRORS = new Set(["not_authenticated", "invalid_session", "missing_session", "session_not_found"]);
 
+function clientIp(req: NextRequest): string | null {
+  const forwarded = (req.headers.get("x-forwarded-for") ?? "").split(",").map((part) => part.trim()).filter(Boolean);
+  return forwarded.at(-1) ?? req.headers.get("x-real-ip");
+}
+
 function serviceUnavailable() {
   return NextResponse.json({ code: "service_unavailable" }, { status: 503 });
 }
@@ -29,6 +34,24 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
     const value = req.headers.get(name);
     if (value) headers.set(name, value);
   }
+  // The API sees this server, not the visitor, so it is told who the visitor is. The last
+  // entry is the one Railway's edge added; anything left of it came from the visitor.
+  // TEMPORARY: remove once we know which header carries the visitor's address on Railway.
+  if (pathWithQuery.startsWith("/api/v1/auth/login")) {
+    console.log(
+      "[proxy-ip-debug]",
+      JSON.stringify({
+        xForwardedFor: req.headers.get("x-forwarded-for"),
+        xRealIp: req.headers.get("x-real-ip"),
+        forwarded: req.headers.get("forwarded"),
+        cfConnectingIp: req.headers.get("cf-connecting-ip"),
+        trueClientIp: req.headers.get("true-client-ip"),
+        xRailwayEdge: req.headers.get("x-railway-edge"),
+      }),
+    );
+  }
+  const visitorIp = clientIp(req);
+  if (visitorIp) headers.set("x-forwarded-for", visitorIp);
   headers.set("X-Timestamp", timestamp);
   headers.set("X-Signature", sign(method, pathWithQuery, timestamp, body));
 
