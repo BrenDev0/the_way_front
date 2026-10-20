@@ -8,9 +8,13 @@ const FORWARDED_REQUEST_HEADERS = ["content-type", "cookie", "accept"];
 const SESSION_COOKIE = "session";
 const SESSION_ERRORS = new Set(["not_authenticated", "invalid_session", "missing_session", "session_not_found"]);
 
+// Railway's edge sends "<visitor>, <its own proxy address>": the visitor is second from the
+// right. Counting from the right keeps it out of reach of entries the visitor adds on the left.
+const PROXY_HOPS = 2;
+
 function clientIp(req: NextRequest): string | null {
   const forwarded = (req.headers.get("x-forwarded-for") ?? "").split(",").map((part) => part.trim()).filter(Boolean);
-  return forwarded.at(-1) ?? req.headers.get("x-real-ip");
+  return forwarded.length >= PROXY_HOPS ? forwarded[forwarded.length - PROXY_HOPS] : null;
 }
 
 function serviceUnavailable() {
@@ -36,20 +40,6 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   }
   // The API sees this server, not the visitor, so it is told who the visitor is. The last
   // entry is the one Railway's edge added; anything left of it came from the visitor.
-  // TEMPORARY: remove once we know which header carries the visitor's address on Railway.
-  if (pathWithQuery.startsWith("/api/v1/auth/login")) {
-    console.log(
-      "[proxy-ip-debug]",
-      JSON.stringify({
-        xForwardedFor: req.headers.get("x-forwarded-for"),
-        xRealIp: req.headers.get("x-real-ip"),
-        forwarded: req.headers.get("forwarded"),
-        cfConnectingIp: req.headers.get("cf-connecting-ip"),
-        trueClientIp: req.headers.get("true-client-ip"),
-        xRailwayEdge: req.headers.get("x-railway-edge"),
-      }),
-    );
-  }
   const visitorIp = clientIp(req);
   if (visitorIp) headers.set("x-forwarded-for", visitorIp);
   headers.set("X-Timestamp", timestamp);
