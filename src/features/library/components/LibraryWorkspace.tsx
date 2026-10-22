@@ -266,7 +266,7 @@ function BrandPanel({
       <div className="stack">
         <div className="toolbar">
           <span className="toolbar__info">
-            El agente usa estos archivos solo cuando la conversación es sobre <strong>{brand.folder.name}</strong>
+            AGENTIX usa estos archivos solo cuando la conversación es sobre <strong>{brand.folder.name}</strong>
           </span>
           <ConfirmButton
             question={brand.files.length ? `¿Eliminar la marca y sus ${brand.files.length} archivos?` : "¿Eliminar la marca?"}
@@ -340,7 +340,7 @@ function BrandPanel({
                 </span>
                 <span className="library__meta">{formatBytes(file.sizeBytes)}</span>
                 <span className="library__actions">
-                  <button type="button" className="linkbtn" onClick={() => copyPath(file)} title="Copia la ruta para pedirle al agente que lo use">
+                  <button type="button" className="linkbtn" onClick={() => copyPath(file)} title="Copia la ruta para pedirle a AGENTIX que lo use">
                     Copiar ruta
                   </button>
                   <ConfirmButton question="¿Eliminar?" onConfirm={() => removeFile(file)}>
@@ -352,7 +352,7 @@ function BrandPanel({
           </ul>
         )}
         <p className="library__hint">
-          Los manuales de marca en PDF súbelos también en <a href="/knowledge">conocimiento</a> y asígnales esta marca, para que el agente pueda leer su texto.
+          Los manuales de marca en PDF súbelos también en <a href="/knowledge">conocimiento</a> y asígnales esta marca, para que AGENTIX pueda leer su texto.
         </p>
       </div>
     </TerminalBox>

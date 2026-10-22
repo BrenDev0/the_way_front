@@ -14,7 +14,7 @@ export default function InviteWelcomePage() {
       <section className="invite-welcome__hero" aria-labelledby="invite-welcome-title">
         <p className="invite-welcome__eyebrow"><span aria-hidden="true">✦</span> INVITACIÓN ACEPTADA / ACCESO CONCEDIDO</p>
         <h1 id="invite-welcome-title">Ya formas parte del equipo.</h1>
-        <p>Tu espacio en {organization?.name ?? "la organización"} está listo. El conocimiento compartido le da contexto al agente para apoyar el trabajo de todos.</p>
+        <p>Tu espacio en {organization?.name ?? "la organización"} está listo. El conocimiento compartido le da contexto a AGENTIX para apoyar el trabajo de todos.</p>
         {canManage ? (
           <Link href="/home" className="btn invite-welcome__primary">Entrar a mi espacio <span aria-hidden="true">↗</span></Link>
         ) : (
@@ -40,7 +40,7 @@ export default function InviteWelcomePage() {
         <div className="invite-welcome__detail">
           <span className="invite-welcome__number">03 / CONOCIMIENTO</span>
           <strong>Contexto compartido</strong>
-          <span>El agente puede consultar las fuentes y la biblioteca de marcas de tu organización.</span>
+          <span>AGENTIX puede consultar las fuentes y la biblioteca de marcas de tu organización.</span>
         </div>
       </section>
 

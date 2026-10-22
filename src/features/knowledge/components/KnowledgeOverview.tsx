@@ -21,7 +21,7 @@ export function KnowledgeOverview() {
             IDENTIDAD / CONTEXTO COMPARTIDO
           </p>
           <h2 id="knowledge-overview-title">La memoria de tu organización.</h2>
-          <p>Reúne quiénes son, qué ofrecen y cómo trabajan. En cuanto se procesan, el agente puede consultar estas fuentes para ayudar a todo el equipo. Asigna cada manual a su marca.</p>
+          <p>Reúne quiénes son, qué ofrecen y cómo trabajan. En cuanto se procesan, AGENTIX puede consultar estas fuentes para ayudar a todo el equipo. Asigna cada manual a su marca.</p>
           <div className="knowledge-overview__tags" aria-label="Ejemplos de conocimiento compartido">
             <span>IDENTIDAD</span>
             <span>PROCESOS</span>
@@ -51,7 +51,7 @@ export function KnowledgeOverview() {
           <span className="knowledge-overview__flow-note">Extrayendo su texto</span>
         </div>
         <div>
-          <span className="knowledge-overview__flow-label">DISPONIBLES PARA EL AGENTE</span>
+          <span className="knowledge-overview__flow-label">DISPONIBLES PARA AGENTIX</span>
           <strong>{loading || unavailable ? "--" : String(trained).padStart(2, "0")}</strong>
           <span className="knowledge-overview__flow-note">En el contexto compartido</span>
         </div>

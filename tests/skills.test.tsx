@@ -172,7 +172,7 @@ describe("skills workspace", () => {
   it("drafts a skill with the agent, loads it into the editor and saves it", async () => {
     const user = userEvent.setup();
     render(<SkillsWorkspace />);
-    await user.type(screen.getByLabelText("Mensaje para el agente"), "Quiero una skill de tono");
+    await user.type(screen.getByLabelText("Mensaje para AGENTIX"), "Quiero una skill de tono");
     await user.click(screen.getByRole("button", { name: "Enviar" }));
 
     await waitFor(() => expect(screen.getByLabelText(/Archivo de la skill/)).toHaveValue(DRAFT), { timeout: 4000 });
@@ -202,7 +202,7 @@ describe("skills workspace", () => {
     });
     const user = userEvent.setup();
     render(<SkillsWorkspace />);
-    await user.type(screen.getByLabelText("Mensaje para el agente"), "Quiero una skill");
+    await user.type(screen.getByLabelText("Mensaje para AGENTIX"), "Quiero una skill");
     await user.click(screen.getByRole("button", { name: "Enviar" }));
 
     await screen.findByText(/limitó las solicitudes/, undefined, { timeout: 4000 });
@@ -218,7 +218,7 @@ describe("skills workspace", () => {
     render(<SkillsWorkspace />);
     const editor = screen.getByLabelText(/Archivo de la skill/);
     await user.type(editor, "mis notas");
-    await user.type(screen.getByLabelText("Mensaje para el agente"), "mejóralo");
+    await user.type(screen.getByLabelText("Mensaje para AGENTIX"), "mejóralo");
     await user.click(screen.getByRole("button", { name: "Enviar" }));
 
     await screen.findByRole("button", { name: "Cargar en el editor" }, { timeout: 4000 });
@@ -308,7 +308,7 @@ describe("skills workspace", () => {
 
   it("keeps members out of skill management", () => {
     render(<SkillsPage />, { ...owner, role: "member" });
-    expect(screen.queryByLabelText("Mensaje para el agente")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Mensaje para AGENTIX")).not.toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

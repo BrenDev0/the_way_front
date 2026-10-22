@@ -55,7 +55,7 @@ export default async function DownloadPage({ searchParams }: { searchParams: Pro
       <div className="download">
         <header className="download__intro">
           <h1 className="download__title">THE WAY Desktop</h1>
-          <p className="download__lead">La app de escritorio para operadores: chatea con el agente, comparte archivos de tu equipo y aprueba lo que hace en tu nombre.</p>
+          <p className="download__lead">La app de escritorio para operadores: chatea con AGENTIX, comparte archivos de tu equipo y aprueba lo que hace en tu nombre.</p>
         </header>
 
         {installers === null || query.error ? (

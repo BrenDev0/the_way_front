@@ -53,7 +53,7 @@ export function SkillKitImporter({ skills }: SkillKitImporterProps) {
       const replaced = saved.filter((skill) => known.has(skill.name)).length;
       setFeedback({
         error: false,
-        message: `${saved.length} skills importadas${replaced ? ` (${replaced} reemplazadas)` : ""}. El agente ya puede usarlas.`,
+        message: `${saved.length} skills importadas${replaced ? ` (${replaced} reemplazadas)` : ""}. AGENTIX ya puede usarlas.`,
       });
       setFound(null);
       await revalidate("skills");

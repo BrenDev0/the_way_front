@@ -113,7 +113,7 @@ export function SkillsLibrary({ skills, loading, error, reload, dirty, onEdit }:
             <Spinner /> Cargando skills
           </p>
         ) : !skills?.length ? (
-          <p className="empty">Todavía no hay skills. Crea una con el agente o sube un archivo .md.</p>
+          <p className="empty">Todavía no hay skills. Crea una con AGENTIX o sube un archivo .md.</p>
         ) : !shown?.length ? (
           <p className="empty">No hay skills que coincidan con la búsqueda.</p>
         ) : (

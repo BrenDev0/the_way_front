@@ -83,7 +83,7 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
         setWaiting(false);
         // paused: shown with its own notice and a way to carry on, below
         if (latest.status !== "idle" && latest.status !== "paused") {
-          setError("El agente no pudo terminar la respuesta. Inicia una nueva sesión para continuar.");
+          setError("AGENTIX no pudo terminar la respuesta. Inicia una nueva sesión para continuar.");
         }
         const written = latestDraft(next);
         if (written) {
@@ -169,19 +169,19 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
   const busy = sending || waiting;
 
   return (
-    <TerminalBox wide title="01 / COWORKING CON EL AGENTE" status={waiting ? "El agente está escribiendo" : conversation ? "Sesión activa" : "Sin sesión"}>
+    <TerminalBox wide title="01 / COWORKING CON AGENTIX" status={waiting ? "AGENTIX está escribiendo" : conversation ? "Sesión activa" : "Sin sesión"}>
       <div className="skill-chat">
         <div className="skill-chat__log" ref={log} aria-live="polite">
           {!lines.length && !pending && (
             <div className="skill-chat__intro">
               <strong>Describe la skill que necesitas.</strong>
-              <span>El agente te hará preguntas y escribirá un borrador en el editor. Tú lo revisas y lo guardas.</span>
-              <span>Si el editor ya tiene contenido, el agente lo recibe para mejorarlo.</span>
+              <span>AGENTIX te hará preguntas y escribirá un borrador en el editor. Tú lo revisas y lo guardas.</span>
+              <span>Si el editor ya tiene contenido, AGENTIX lo recibe para mejorarlo.</span>
             </div>
           )}
           {lines.map((line) => (
             <div key={line.key} className={`skill-chat__msg skill-chat__msg--${line.role}`}>
-              <span className="skill-chat__who">{line.role === "user" ? "TÚ" : "AGENTE"}</span>
+              <span className="skill-chat__who">{line.role === "user" ? "TÚ" : "AGENTIX"}</span>
               {line.role === "user" ? (
                 <p>{line.text}</p>
               ) : (
@@ -215,8 +215,8 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
           )}
           {waiting && (
             <div className="skill-chat__msg skill-chat__msg--assistant">
-              <span className="skill-chat__who">AGENTE</span>
-              <Busy words={["PENSANDO"]} />
+              <span className="skill-chat__who">AGENTIX</span>
+              <Busy words={["AGENTIX PENSANDO"]} />
               {polls >= SLOW_AFTER_POLLS && (
                 <p className="field__hint">Está tardando más de lo normal. Si no avanza, revisa que el worker del backend esté activo.</p>
               )}
@@ -226,7 +226,7 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
         {conversation?.status === "paused" && !busy && (
           <div className="alert alert--warn skill-chat__pause" role="alert">
             <p>
-              <strong>{pauseText(conversation.pause).title}.</strong> {pauseText(conversation.pause).body} Todo lo que hizo el agente hasta aquí está guardado.
+              <strong>{pauseText(conversation.pause).title}.</strong> {pauseText(conversation.pause).body} Todo lo que hizo AGENTIX hasta aquí está guardado.
             </p>
             <button type="button" className="btn btn--small" onClick={() => void resume()}>
               Reanudar
@@ -236,7 +236,7 @@ export function SkillCoworking({ draft, onAgentDraft, onLoadDraft }: SkillCowork
         {error && <p className="alert alert--error" role="alert">! {error}</p>}
         <form className="skill-chat__composer" onSubmit={send}>
           <label className="field">
-            Mensaje para el agente
+            Mensaje para AGENTIX
             <textarea
               className="field__input skill-textarea skill-chat__input"
               rows={3}

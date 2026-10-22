@@ -130,7 +130,7 @@ export function ApiKeysManager({ initialUserId = "" }: { initialUserId?: string 
             </select>
           </label>}
         <Field label="Llave secreta" type="password" autoComplete="new-password" value={secret} onChange={(event) => setSecret(event.target.value)} required disabled={busy} />
-        <p className="field__hint">Solo se muestran los últimos cuatro caracteres de las llaves guardadas. El CX y Tavily no habilitan IA por sí solos; asigna Anthropic u OpenAI. Tavily activa la búsqueda e investigación web del agente. Si hay ambos, el servidor prioriza Anthropic.</p>
+        <p className="field__hint">Solo se muestran los últimos cuatro caracteres de las llaves guardadas. El CX y Tavily no habilitan IA por sí solos; asigna Anthropic u OpenAI. Tavily activa la búsqueda e investigación web de AGENTIX. Si hay ambos, el servidor prioriza Anthropic.</p>
         {replacing && <p className="alert alert--warn">Al guardar reemplazarás la llave actual de este proveedor para esta persona.</p>}
         <button className="btn" disabled={busy || !selected || keys.loading || Boolean(keys.error) || Boolean(members.error)}>{busy ? <Busy words={["GUARDANDO"]} /> : replacing ? "Reemplazar llave" : "Guardar llave"}</button>
       </form>

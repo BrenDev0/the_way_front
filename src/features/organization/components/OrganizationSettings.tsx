@@ -485,7 +485,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
       ) : usage.error && !data ? (
         <p className="alert alert--error">! {errorMessage(usage.error)}</p>
       ) : all && all.conversations === 0 ? (
-        <p className="empty">Nadie ha conversado con el agente en este periodo.</p>
+        <p className="empty">Nadie ha conversado con AGENTIX en este periodo.</p>
       ) : all ? (
         <>
           <dl className="cx__figures">

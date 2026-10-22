@@ -9,7 +9,7 @@ export default function LibraryPage() {
         <PageHeader
           kicker="ORGANIZACIÓN :: BIBLIOTECA"
           title="Biblioteca de marcas"
-          description="Logos, imágenes, fuentes y manuales por cliente. El agente los usa en el chat y nunca los modifica."
+          description="Logos, imágenes, fuentes y manuales por cliente. AGENTIX los usa en el chat y nunca los modifica."
         />
         <LibraryWorkspace />
       </div>

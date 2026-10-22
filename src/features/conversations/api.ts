@@ -34,7 +34,7 @@ export interface ConversationMessage {
 
 const errors = {
   conversation_not_found: "La conversación ya no existe.",
-  conversation_busy: "El agente sigue trabajando en el mensaje anterior.",
+  conversation_busy: "AGENTIX sigue trabajando en el mensaje anterior.",
   api_key_not_configured: "No tienes una llave de Anthropic u OpenAI asignada. Asígnate una en Llaves API.",
   conversation_not_paused: "La conversación ya no está en pausa.",
 };

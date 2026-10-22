@@ -69,7 +69,7 @@ export function DocumentsTable() {
         <div className="toolbar">
           <span className="toolbar__info">
             {undescribed > 0
-              ? `${undescribed} ${undescribed === 1 ? "documento" : "documentos"} sin descripción — ya están disponibles; una descripción ayuda al agente a elegir cuál leer`
+              ? `${undescribed} ${undescribed === 1 ? "documento" : "documentos"} sin descripción — ya están disponibles; una descripción ayuda a AGENTIX a elegir cuál leer`
               : "Todas las fuentes tienen descripción"}
           </span>
           <button className="btn btn--small toolbar__action" type="button" onClick={describe} disabled={training || undescribed === 0}>

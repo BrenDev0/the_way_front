@@ -9,7 +9,7 @@ export default function KnowledgePage() {
         <PageHeader
           kicker="ORGANIZACIÓN :: CONOCIMIENTO"
           title="Conocimiento de la organización"
-          description="La referencia compartida que ayuda al agente a apoyar a todo el equipo."
+          description="La referencia compartida que ayuda a AGENTIX a apoyar a todo el equipo."
         />
         <KnowledgeOverview />
         <DocumentUploader />

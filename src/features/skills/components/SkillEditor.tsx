@@ -31,7 +31,7 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
     setFeedback(null);
     try {
       const skill = await saveSkill({ instructions: draft });
-      setFeedback({ error: false, message: `Skill "${skill.name}" guardada. El agente ya puede usarla.` });
+      setFeedback({ error: false, message: `Skill "${skill.name}" guardada. AGENTIX ya puede usarla.` });
       onSaved(draft);
       await revalidate("skills");
     } catch (err) {
@@ -65,7 +65,7 @@ export function SkillEditor({ draft, dirty, skills, onChange, onSaved }: SkillEd
             rows={18}
             spellCheck={false}
             value={draft}
-            placeholder={`${TEMPLATE}Escribe las instrucciones aquí, o pídele al agente que las redacte.`}
+            placeholder={`${TEMPLATE}Escribe las instrucciones aquí, o pídele a AGENTIX que las redacte.`}
             onChange={(event) => onChange(event.target.value)}
             disabled={saving}
           />
