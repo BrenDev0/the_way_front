@@ -1,8 +1,8 @@
 name: CI
 
-# Type-check and test every push and pull request, and prove the image still builds. When
-# everything passes on main, push the customers' panel to Docker Hub.
-# A pull request never pushes anything.
+# Every push and pull request runs the checks first -- type-check and tests, each as its own
+# job, so the run shows which one failed. Only when both pass is the Docker image built, and
+# only on main is the customers' panel pushed to Docker Hub. A pull request never pushes anything.
 #
 # Needs, in Settings > Secrets and variables > Actions:
 #   variable  DOCKERHUB_USERNAME
@@ -24,50 +24,50 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    name: Typecheck, tests and build
+  # --- the checks: nothing is built here, and they run side by side --------------------
+  # The Dockerfile's own Node (22), so a pass here means the same in the image.
+
+  typecheck:
+    name: Typecheck
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
-      # The Dockerfile's own Node, so a pass here means the same in the image.
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
       - run: npm ci
-
       - run: npm run typecheck
 
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
       - run: npm test
 
-      - uses: docker/setup-buildx-action@v3
-
-      # `next build` runs inside the Dockerfile, so this catches a build that fails before it
-      # is merged. Nothing is pushed; the layers are kept for the push job.
-      - name: Build the image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  # Only after every check above passed, and only for a commit that landed on main.
-  push:
-    name: Push the_way_frontend
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  # --- the image: only after both checks passed ----------------------------------------
+  # Built on every run (`next build` runs inside the Dockerfile, so a build that fails is
+  # caught before it is merged), and pushed only for a commit that landed on main.
+  image:
+    name: Build the_way_frontend
+    needs: [typecheck, tests]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-
       - uses: docker/setup-buildx-action@v3
 
-      - uses: docker/login-action@v3
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -75,6 +75,7 @@ jobs:
       # latest is what Railway runs; sha-<short> pins this exact build, to roll back to.
       - name: Image tags
         id: meta
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker/metadata-action@v5
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/the_way_frontend
@@ -82,14 +83,13 @@ jobs:
             type=raw,value=latest
             type=sha,format=short
 
-      - name: Build and push
+      - name: Build the image (pushed only on main)
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # the layers the test job just built come from the cache, so this mostly pushes
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
