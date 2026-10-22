@@ -57,7 +57,7 @@ jobs:
   # Built on every run (`next build` runs inside the Dockerfile, so a build that fails is
   # caught before it is merged), and pushed only for a commit that landed on main.
   image:
-    name: Build the_way_frontend
+    name: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'Build and push the_way_frontend' || 'Build the_way_frontend (not pushed)' }}
     needs: [typecheck, tests]
     runs-on: ubuntu-latest
     timeout-minutes: 20
