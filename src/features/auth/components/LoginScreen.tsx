@@ -69,9 +69,7 @@ export function LoginScreen() {
             {busy ? <Busy words={["AUTENTICANDO", "CONECTANDO", "DESCIFRANDO"]} /> : "Conectar"}
           </button>
         </form>
-        <p className="switch">
-          ¿Sin identidad? <Link href="/signup">Crea una ❯</Link>
-        </p>
+        <p className="switch">¿Sin identidad? El acceso es solo por invitación.</p>
         <p className="switch">
           ¿Eres operador? <Link href="/download">Descarga la app de escritorio ❯</Link>
         </p>

@@ -6,11 +6,27 @@ import { useState, type FormEvent } from "react";
 import { clearResources, errorMessage } from "@/shared/api";
 import { saveUser } from "@/shared/session";
 import { AuthShell, Busy, Field, Scramble, TerminalBox } from "@/shared/ui";
-import { acceptInvitation, login } from "../api";
+import { acceptInvitation, acceptOwnerInvitation, login } from "../api";
 
 const MIN_PASSWORD = 8;
 
-export function AcceptInviteScreen({ token }: { token: string | null }) {
+// "member": someone in an organization invited a person into it. "owner": Xplorers invited
+// someone to start an organization -- accepting creates it, with this person as its owner.
+const KINDS = {
+  member: {
+    accept: acceptInvitation,
+    intro: "Te invitaron a unirte a una organización en THE WAY. Crea tu contraseña para acceder al espacio compartido del equipo.",
+    submit: "Unirme",
+  },
+  owner: {
+    accept: acceptOwnerInvitation,
+    intro: "Xplorers te invitó a abrir tu organización en THE WAY. Crea tu contraseña: serás su propietario y podrás invitar a tu equipo.",
+    submit: "Abrir mi organización",
+  },
+} as const;
+
+export function AcceptInviteScreen({ token, kind = "member" }: { token: string | null; kind?: keyof typeof KINDS }) {
+  const { accept, intro, submit } = KINDS[kind];
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -29,7 +45,7 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
     setBusy(true);
     let email: string;
     try {
-      email = (await acceptInvitation(token, password)).email;
+      email = (await accept(token, password)).email;
     } catch (err) {
       setError(errorMessage(err));
       setBusy(false);
@@ -63,7 +79,7 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
               <span className="steps__line" />
               <span>[02] Entrar al equipo</span>
             </div>
-            <p className="field__hint">Te invitaron a unirte a una organización en THE WAY. Crea tu contraseña para acceder al espacio compartido del equipo.</p>
+            <p className="field__hint">{intro}</p>
             <Field
               label="Contraseña"
               revealable
@@ -90,7 +106,7 @@ export function AcceptInviteScreen({ token }: { token: string | null }) {
               </p>
             )}
             <button className="btn" type="submit" disabled={busy}>
-              {busy ? <Busy words={["ACTIVANDO", "PROVISIONANDO", "CONECTANDO"]} /> : "Unirme"}
+              {busy ? <Busy words={["ACTIVANDO", "PROVISIONANDO", "CONECTANDO"]} /> : submit}
             </button>
           </form>
         ) : (

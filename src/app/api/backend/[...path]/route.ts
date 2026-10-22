@@ -28,6 +28,10 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   }
 
   const { path } = await ctx.params;
+  // Xplorers' staff routes belong to its own dashboard, never to the customers' panel: this
+  // proxy signs whatever it forwards, so without this a visitor could reach them from here.
+  if (path[0] === "staff") return NextResponse.json({ code: "not_found" }, { status: 404 });
+
   const pathWithQuery = `/api/v1/${path.map(encodeURIComponent).join("/")}${req.nextUrl.search}`;
   const method = req.method.toUpperCase();
   const body = method === "GET" || method === "HEAD" ? Buffer.alloc(0) : Buffer.from(await req.arrayBuffer());
