@@ -436,7 +436,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
       <fieldset className="org__prices">
         <legend className="cx__subtitle">Precios de tu modelo · para calcular el costo</legend>
         <p className="cx__note">
-          Copia los tres precios del modelo que usa tu llave desde la página de tu proveedor:{" "}
+          Copia los tres precios del modelo que usa tu organización desde la página de su proveedor:{" "}
           <a href="https://openai.com/api/pricing" target="_blank" rel="noreferrer noopener" className="linkbtn">
             precios de OpenAI ↗
           </a>{" "}
@@ -549,7 +549,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
             </tbody>
           </table>
           <p className="cx__note">
-            Cada persona usa su propia llave de IA, así que el cobro llega a cada llave. El costo es una estimación con los precios que escribiste (se guardan en este
+            La organización trabaja con las llaves de IA que pone Xplorers. El costo es una estimación con los precios que escribiste (se guardan en este
             navegador). No incluye las tareas en segundo plano, que todavía no registran tokens.
           </p>
         </>

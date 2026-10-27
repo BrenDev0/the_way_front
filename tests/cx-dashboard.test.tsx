@@ -241,7 +241,7 @@ describe("mi cx sections", () => {
 
     response = { connected: true, invalidToken: true, generatedAt: new Date().toISOString() };
     render(<CxDashboard key="again" />);
-    expect(await screen.findByRole("alert")).toHaveTextContent("rechazó tu llave");
+    expect(await screen.findByRole("alert")).toHaveTextContent("rechazó la llave de tu organización");
   });
 
   it("re-reads CX on demand and with the chosen period", async () => {

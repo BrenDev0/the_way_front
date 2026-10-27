@@ -1,9 +1,8 @@
-import { ApiKeysStat, LlmKeyNotice } from "@/features/api-keys";
 import { InvitationsStat } from "@/features/invitations";
 import { DocumentsStat, KnowledgeStatus } from "@/features/knowledge";
 import { SkillsStat } from "@/features/skills";
 import { ADMIN_ROLES, RequireRole } from "@/shared/session";
-import { Welcome } from "@/shell";
+import { AiAccessNotice, Welcome } from "@/shell";
 import { ActionOverview } from "@/shell/ActionOverview";
 
 export default function HomePage() {
@@ -11,7 +10,7 @@ export default function HomePage() {
     <div className="dash">
       <Welcome />
       <RequireRole roles={ADMIN_ROLES}>
-        <LlmKeyNotice />
+        <AiAccessNotice />
         <ActionOverview />
       </RequireRole>
       <div className="stats">
@@ -19,7 +18,6 @@ export default function HomePage() {
           <DocumentsStat />
           <InvitationsStat />
           <SkillsStat />
-          <ApiKeysStat />
         </RequireRole>
       </div>
       <div className="dash__panels">

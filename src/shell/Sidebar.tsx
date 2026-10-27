@@ -20,7 +20,6 @@ const NAV: NavItem[] = [
   { label: "Biblioteca", href: "/library", icon: "▣" },
   { label: "Operadores", href: "/members", icon: "◎" },
   { label: "Skills", href: "/skills", icon: "◇" },
-  { label: "Llaves API", href: "/api-keys", icon: "⚿" },
   { label: "Organización", href: "/organization", icon: "▦" },
 ];
 

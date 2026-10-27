@@ -1,17 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMembers } from "@/features/members/hooks";
 import { useInvitations } from "@/features/invitations/hooks";
 import { isAvailable } from "@/features/knowledge/api";
 import { useDocuments } from "@/features/knowledge/hooks";
 
 export function ActionOverview() {
-  const members = useMembers();
   const invitations = useInvitations();
   const documents = useDocuments();
   const actions = [
-    { label: "Configurar equipo", detail: "Personas necesitan una llave de IA", href: "/members", count: members.data?.filter((m) => !m.setupComplete).length, error: members.error },
     { label: "Revisar invitaciones", detail: "Invitaciones pendientes", href: "/members", count: invitations.data?.length, error: invitations.error },
     { label: "Describir conocimiento", detail: "Documentos sin descripción", href: "/knowledge", count: documents.data?.filter((d) => isAvailable(d) && !d.description.trim()).length, error: documents.error },
   ];

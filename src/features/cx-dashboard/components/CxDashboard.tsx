@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, useState, type ReactNode } from "react";
 import { errorMessage, revalidate, useResource } from "@/shared/api";
 import { formatRelative } from "@/shared/format";
@@ -102,8 +101,7 @@ export function CxDashboard() {
     return (
       <TerminalBox wide title="EL CX NO ESTÁ CONECTADO">
         <p>
-          Mi CX lee tu cuenta del CX con tu propia llave. Agrégala con su ID de ubicación en{" "}
-          <Link href="/api-keys">Llaves API</Link> y vuelve aquí.
+          Mi CX lee la cuenta del CX de tu organización. Todavía no está conectada: pide a Xplorers que la conecte y vuelve aquí.
         </p>
       </TerminalBox>
     );
@@ -113,7 +111,7 @@ export function CxDashboard() {
       <div className="cx">
         {controls}
         <p className="alert alert--error" role="alert">
-          ! El CX rechazó tu llave: puede estar revocada o ser de otra cuenta. Reemplázala en <Link href="/api-keys">Llaves API</Link>.
+          ! El CX rechazó la llave de tu organización: puede estar revocada o ser de otra cuenta. Pide a Xplorers que la reemplace.
         </p>
       </div>
     );

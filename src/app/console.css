@@ -372,7 +372,6 @@ h1, h2, h3, .welcome__kicker, .sidebar__org, .term__title, .term__status, .conso
 .members-list__identity { gap: 2px; }
 .members-list__email { font-size: 14px; font-weight: 500; }
 .members-list__joined { font-size: 12px; }
-.members-list__status { flex: none; width: 176px; }
 .members-list__role { flex: none; width: 136px; min-width: 0; padding: 4px 10px; border-radius: 999px; font-size: 10px; letter-spacing: .06em; }
 .members-list__email-line { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .members-list__you { flex: none; padding: 1px 5px; font-size: 9px; }
@@ -381,7 +380,6 @@ h1, h2, h3, .welcome__kicker, .sidebar__org, .term__title, .term__status, .conso
 @media (max-width: 900px) {
   .members-list__row { flex-wrap: wrap; }
   .members-list__identity { flex-basis: calc(100% - 84px); }
-  .members-list__status { margin-left: 84px; } /* under the email: index 22 + gap 14 + avatar 34 + gap 14 */
 }
 
 /* the public download page: the sign-in's shell, two installer boxes side by side */

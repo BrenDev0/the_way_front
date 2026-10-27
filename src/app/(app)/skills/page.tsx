@@ -1,7 +1,7 @@
-import { LlmKeyNotice } from "@/features/api-keys";
 import { SkillsWorkspace } from "@/features/skills";
 import { ADMIN_ROLES, RequireRole } from "@/shared/session";
 import { AccessDenied, PageHeader } from "@/shared/ui";
+import { AiAccessNotice } from "@/shell";
 
 export default function SkillsPage() {
   return (
@@ -12,7 +12,7 @@ export default function SkillsPage() {
           title="Skills de AGENTIX"
           description="Instrucciones reutilizables que AGENTIX consulta cuando una tarea coincide. Créalas conversando con AGENTIX o sube archivos .md."
         />
-        <LlmKeyNotice />
+        <AiAccessNotice />
         <SkillsWorkspace />
       </div>
     </RequireRole>
