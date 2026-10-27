@@ -291,30 +291,6 @@ function Orphans({ overview, members }: { overview: Overview; members: User[] | 
 
 // --- AI usage -------------------------------------------------------------------------
 
-const PRICES_KEY = "theway.ai-prices";
-
-interface Prices {
-  input: string;
-  cached: string;
-  output: string;
-}
-
-const NO_PRICES: Prices = { input: "", cached: "", output: "" };
-
-function loadPrices(): Prices {
-  try {
-    const saved = JSON.parse(localStorage.getItem(PRICES_KEY) ?? "null");
-    if (saved && typeof saved.input === "string" && typeof saved.output === "string") return { ...NO_PRICES, ...saved };
-  } catch {}
-  return NO_PRICES;
-}
-
-function savePrices(prices: Prices) {
-  try {
-    localStorage.setItem(PRICES_KEY, JSON.stringify(prices));
-  } catch {}
-}
-
 function compact(value: number) {
   return new Intl.NumberFormat("es-MX", { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
@@ -336,75 +312,9 @@ function totals(rows: Usage["rows"]) {
   );
 }
 
-/** One price box: a dollar amount per million tokens, with what it is and where it is. */
-function PriceField({
-  id,
-  label,
-  column,
-  help,
-  example,
-  value,
-  optional,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  column: string;
-  help: string;
-  example: string;
-  value: string;
-  optional?: boolean;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <div className="org__price">
-      <label htmlFor={id} className="field__label">
-        {label}
-        {optional && <span className="org__optional"> · opcional</span>}
-      </label>
-      <div className="org__price-input">
-        <span aria-hidden="true">$</span>
-        <input
-          id={id}
-          className="field__input"
-          inputMode="decimal"
-          placeholder={example}
-          value={value}
-          aria-describedby={`${id}-help`}
-          onChange={(e) => onChange(e.target.value.replace(",", "."))}
-        />
-        <span className="cx__muted">USD por 1 M tokens</span>
-      </div>
-      <p id={`${id}-help`} className="cx__note">
-        {help} En la página de precios es la columna <strong>“{column}”</strong>.
-      </p>
-    </div>
-  );
-}
-
 function UsageSection({ members }: { members: User[] | undefined }) {
   const [months, setMonths] = useState(6);
   const usage = useResource(`organization-usage:${months}`, () => getUsage(months));
-  const [prices, setPrices] = useState<Prices>(() => (typeof window === "undefined" ? NO_PRICES : loadPrices()));
-
-  function updatePrice(key: keyof Prices, value: string) {
-    const next = { ...prices, [key]: value };
-    setPrices(next);
-    savePrices(next);
-  }
-
-  const input = Number.parseFloat(prices.input);
-  const output = Number.parseFloat(prices.output);
-  // left blank, cached input is priced like any other input: an overestimate, never an under
-  const cachedPrice = prices.cached.trim() === "" ? input : Number.parseFloat(prices.cached);
-  const priced = [input, output, cachedPrice].every((p) => Number.isFinite(p) && p >= 0);
-  // The input count already includes what was read from the cache (and, for Anthropic,
-  // what was written to it). Only the cached reads are billed at their own, lower price;
-  // writes stay at the input price, a little under Anthropic's surcharge for them.
-  const cost = (t: { input: number; output: number; cacheRead: number; cacheWrite: number }) =>
-    (Math.max(0, t.input - t.cacheRead) * input + t.cacheRead * cachedPrice + t.output * output) / 1_000_000;
-  const usd = new Intl.NumberFormat("es-MX", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-
   const data = usage.data;
   const people = data
     ? Object.entries(
@@ -433,51 +343,6 @@ function UsageSection({ members }: { members: User[] | undefined }) {
         </label>
       </div>
 
-      <fieldset className="org__prices">
-        <legend className="cx__subtitle">Precios de tu modelo · para calcular el costo</legend>
-        <p className="cx__note">
-          Copia los tres precios del modelo que usa tu organización desde la página de su proveedor:{" "}
-          <a href="https://openai.com/api/pricing" target="_blank" rel="noreferrer noopener" className="linkbtn">
-            precios de OpenAI ↗
-          </a>{" "}
-          o{" "}
-          <a href="https://claude.com/pricing" target="_blank" rel="noreferrer noopener" className="linkbtn">
-            precios de Anthropic ↗
-          </a>
-          . Busca la fila de tu modelo y escribe solo el número en dólares.
-        </p>
-        <div className="org__price-grid">
-          <PriceField
-            id="price-input"
-            label="Precio de entrada"
-            column="Input"
-            help="Lo que cuesta todo lo que se le envía a la IA: tus mensajes, el historial, las instrucciones y lo que lee."
-            example="3.00"
-            value={prices.input}
-            onChange={(v) => updatePrice("input", v)}
-          />
-          <PriceField
-            id="price-cached"
-            label="Precio de entrada en caché"
-            column="Cached input"
-            help="El precio rebajado de lo que la IA ya había recibido antes en la misma conversación. Si lo dejas vacío, se cobra como entrada normal."
-            example="0.30"
-            value={prices.cached}
-            optional
-            onChange={(v) => updatePrice("cached", v)}
-          />
-          <PriceField
-            id="price-output"
-            label="Precio de salida"
-            column="Output"
-            help="Lo que cuesta lo que la IA escribe de vuelta. Suele ser varias veces más caro que la entrada."
-            example="15.00"
-            value={prices.output}
-            onChange={(v) => updatePrice("output", v)}
-          />
-        </div>
-      </fieldset>
-
       {usage.loading ? (
         <p className="empty">
           <Spinner /> Sumando el uso
@@ -502,11 +367,6 @@ function UsageSection({ members }: { members: User[] | undefined }) {
               <dt>Tokens de salida</dt>
               <dd>{compact(all.output)}</dd>
             </div>
-            <div>
-              <dt>Costo estimado</dt>
-              <dd>{priced ? usd.format(cost(all)) : "—"}</dd>
-              {!priced && <span className="cx__muted">Escribe los precios de entrada y salida abajo</span>}
-            </div>
           </dl>
 
           <ul className="ranked" aria-label="Tokens por mes">
@@ -517,7 +377,7 @@ function UsageSection({ members }: { members: User[] | undefined }) {
                   <span className="ranked__bar" style={{ width: m.input + m.output ? `${Math.max(1.5, ((m.input + m.output) / peak) * 55)}%` : 0 }} />
                   <span className="ranked__value">
                     {compact(m.input + m.output)} tokens
-                    <span className="ranked__detail"> · {number.format(m.conversations)} conv.{priced ? ` · ${usd.format(cost(m))}` : ""}</span>
+                    <span className="ranked__detail"> · {number.format(m.conversations)} conv.</span>
                   </span>
                 </span>
               </li>
@@ -532,7 +392,6 @@ function UsageSection({ members }: { members: User[] | undefined }) {
                 <th scope="col">Entrada</th>
                 <th scope="col">Salida</th>
                 <th scope="col">De ellos, caché</th>
-                <th scope="col">Costo</th>
               </tr>
             </thead>
             <tbody>
@@ -543,14 +402,12 @@ function UsageSection({ members }: { members: User[] | undefined }) {
                   <td>{compact(p.input)}</td>
                   <td>{compact(p.output)}</td>
                   <td>{compact(p.cacheRead)}</td>
-                  <td>{priced ? usd.format(cost(p)) : "—"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <p className="cx__note">
-            La organización trabaja con las llaves de IA que pone Xplorers. El costo es una estimación con los precios que escribiste (se guardan en este
-            navegador). No incluye las tareas en segundo plano, que todavía no registran tokens.
+            Es lo que ha usado tu organización con AGENTIX. No incluye las tareas en segundo plano, que todavía no registran tokens.
           </p>
         </>
       ) : null}

@@ -123,14 +123,6 @@ select.field__input option { background: #0c1319; }
 .org__orphans li:last-child { border-bottom: 0; }
 .org__orphan-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .org__orphan-actions .field__input { min-width: 220px; }
-.org__prices { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 14px; border: 1px solid var(--border-dim); border-radius: 8px; background: var(--panel-sunk); }
-.org__prices legend { padding: 0 6px; }
-.org__price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-.org__price { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.org__price-input { display: flex; align-items: center; gap: 8px; }
-.org__price-input .field__input { width: 110px; font-variant-numeric: tabular-nums; }
-.org__price-input > span:first-child { color: var(--text-bright); }
-.org__optional { color: var(--muted); font-weight: 400; }
 .org__danger { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 .org__delete:not(:disabled) { border-color: var(--error); color: var(--error); }
 @media (max-width: 1000px) { .org__grid, .org__danger { grid-template-columns: 1fr; } }

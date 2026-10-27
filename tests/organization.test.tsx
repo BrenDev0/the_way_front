@@ -74,24 +74,24 @@ describe("organization settings", () => {
     expect(JSON.parse(calls("projects/management/p-orphan/transfer", "POST")[0][1].body)).toEqual({ newOwnerId: "u-admin" });
   });
 
-  it("estimates cost from the prices written in, with cached reads at their own price", async () => {
+  it("shows the AI usage as tokens only: no prices to fill in, no cost worked out", async () => {
     render(<OrganizationSettings />);
     const usage = (await screen.findByRole("heading", { name: "USO DE IA" })).closest("section")!;
-    expect(await within(usage).findByText("Escribe los precios de entrada y salida abajo")).toBeInTheDocument();
 
-    await userEvent.type(within(usage).getByLabelText("Precio de entrada"), "3");
-    await userEvent.type(within(usage).getByLabelText("Precio de salida"), "15");
+    // the totals, by month and by person
+    expect(await within(usage).findByText("Tokens de entrada")).toBeInTheDocument();
+    expect(within(usage).getByText("Tokens de salida")).toBeInTheDocument();
+    expect(within(usage).getByText(/leídos de caché/)).toBeInTheDocument();
+    expect(within(usage).getByRole("list", { name: "Tokens por mes" })).toBeInTheDocument();
+    expect(within(usage).getByRole("columnheader", { name: "Entrada" })).toBeInTheDocument();
 
-    // cache left blank: all 3M input × $3 + 0.3M output × $15 = $13.50
-    expect(within(usage).getByText(/13\.50/)).toBeInTheDocument();
-
-    // the 0.5M read from cache are part of the input: 2.5M × $3 + 0.5M × $0.30 + 0.3M × $15 = $12.15
-    await userEvent.type(within(usage).getByLabelText(/Precio de entrada en caché/), "0.30");
-    expect(within(usage).getByText(/12\.15/)).toBeInTheDocument();
-    expect(JSON.parse(localStorage.getItem("theway.ai-prices")!)).toEqual({ input: "3", cached: "0.30", output: "15" });
-    // each box says which column of the price page it takes
-    expect(within(usage).getByLabelText("Precio de salida")).toHaveAccessibleDescription(/columna “Output”/);
-    expect(within(usage).getByRole("link", { name: /precios de OpenAI/ })).toHaveAttribute("href", "https://openai.com/api/pricing");
+    // nothing to price: no boxes, no links to a provider's prices, no cost anywhere
+    expect(within(usage).queryByLabelText(/Precio/)).not.toBeInTheDocument();
+    expect(within(usage).queryByRole("link")).not.toBeInTheDocument();
+    expect(within(usage).queryByText(/costo|\$|USD/i)).not.toBeInTheDocument();
+    expect(within(usage).queryByRole("columnheader", { name: "Costo" })).not.toBeInTheDocument();
+    // and nothing is kept in the browser any more
+    expect(localStorage.getItem("theway.ai-prices")).toBeNull();
   });
 
   it("deletes the organization only after its exact name is typed", async () => {
