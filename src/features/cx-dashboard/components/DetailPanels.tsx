@@ -173,7 +173,7 @@ export function ConversationPanel({ id, name, onClose }: { id: string; name: str
             ? "Este canal no se puede responder desde aquí; contesta en el CX."
             : result.reason === "window_closed"
               ? "La ventana de 24 h se cerró: el mensaje no se envió. Retoma la conversación con una plantilla desde el CX."
-              : `${REJECTED} ${result.detail ?? ""}`.trim(),
+              : REJECTED,
         );
       }
     } catch (err) {

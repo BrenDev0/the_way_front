@@ -332,7 +332,7 @@ describe("mi cx details", () => {
     expect(within(panel).queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it("says why CX refused a reply and keeps the draft", async () => {
+  it("says CX refused a reply, without repeating the provider's own words, and keeps the draft", async () => {
     reply = { sent: false, reason: "rejected", detail: "Outside the 24 hour window" };
     render(<CxDashboard />);
     await openTab(/Conversaciones/);
@@ -343,7 +343,9 @@ describe("mi cx details", () => {
     await userEvent.type(within(panel).getByLabelText("Responder por whatsapp"), "Hola");
     await userEvent.click(within(panel).getByRole("button", { name: "Enviar" }));
 
-    expect(await within(panel).findByRole("alert")).toHaveTextContent("Outside the 24 hour window");
+    const alert = await within(panel).findByRole("alert");
+    expect(alert).toHaveTextContent("El CX no envió el mensaje.");
+    expect(alert).not.toHaveTextContent("Outside the 24 hour window");
     expect(within(panel).getByLabelText("Responder por whatsapp")).toHaveValue("Hola");
   });
 
