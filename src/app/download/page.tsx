@@ -19,7 +19,8 @@ const STEPS: Record<Platform, { heading: string; steps: ReactNode[] }> = {
   windows: {
     heading: "Instalar en Windows",
     steps: [
-      "Abre THE-WAY-Setup.exe desde tus descargas.",
+      // saved with its version (THE-WAY-Setup-0.1.11.exe), so the name is given by its start
+      "Abre el instalador (THE-WAY-Setup…exe) desde tus descargas.",
       "Si aparece «Windows protegió su PC», pulsa Más información y después Ejecutar de todas formas.",
       "Se instala solo, sin permisos de administrador, y abre la app. Inicia sesión con tu cuenta.",
     ],
@@ -27,7 +28,7 @@ const STEPS: Record<Platform, { heading: string; steps: ReactNode[] }> = {
   mac: {
     heading: "Instalar en macOS",
     steps: [
-      "Abre THE-WAY-mac.zip y arrastra THE WAY a Aplicaciones.",
+      "Abre el archivo THE-WAY-mac…zip desde tus descargas y arrastra THE WAY a Aplicaciones.",
       "Ábrela. Si macOS la bloquea, ve a Ajustes del Sistema › Privacidad y seguridad y pulsa Abrir igualmente.",
       <>Si dice que la app «está dañada», ejecuta en Terminal <code className="download__code">xattr -cr "/Applications/THE WAY.app"</code> y ábrela de nuevo.</>,
     ],
