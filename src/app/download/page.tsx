@@ -28,7 +28,8 @@ const STEPS: Record<Platform, { heading: string; steps: ReactNode[] }> = {
   mac: {
     heading: "Instalar en macOS",
     steps: [
-      "Abre el archivo THE-WAY-mac…zip desde tus descargas y arrastra THE WAY a Aplicaciones.",
+      "Si ya tienes THE WAY abierta, ciérrala por completo con ⌘Q: cerrar la ventana no basta.",
+      "Abre el archivo THE-WAY-mac…zip desde tus descargas y arrastra THE WAY a Aplicaciones. Si pregunta, elige Reemplazar.",
       "Ábrela. Si macOS la bloquea, ve a Ajustes del Sistema › Privacidad y seguridad y pulsa Abrir igualmente.",
       <>Si dice que la app «está dañada», ejecuta en Terminal <code className="download__code">xattr -cr "/Applications/THE WAY.app"</code> y ábrela de nuevo.</>,
     ],
